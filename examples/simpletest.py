@@ -25,7 +25,11 @@ import logging
 import sys
 import time
 
-from Adafruit_BNO055 import BNO055
+sys.path.append("Adafruit_BNO055")
+import BNO055
+
+php-ldap
+
 
 
 # Create and configure the BNO sensor connection.  Make sure only ONE of the
