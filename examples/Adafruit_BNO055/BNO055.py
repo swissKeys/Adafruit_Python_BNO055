@@ -386,6 +386,7 @@ class BNO055(object):
         self._config_mode()
         self._write_byte(BNO055_PAGE_ID_ADDR, 0)
         # Check the chip ID
+        print("writting worked")
         bno_id = self._read_byte(BNO055_CHIP_ID_ADDR)
         logger.debug('Read chip ID: 0x{0:02X}'.format(bno_id))
 
