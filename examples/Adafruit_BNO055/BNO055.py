@@ -366,6 +366,7 @@ class BNO055(object):
         BNO055 library functions.  Will return True if the BNO055 was
         successfully initialized, and False otherwise.
         """
+        print("enter init")
         # Save the desired normal operation mode.
         self._mode = mode
         # First send a thow-away command and ignore any response or I2C errors
@@ -377,6 +378,7 @@ class BNO055(object):
             # Swallow an IOError that might be raised by an I2C issue.  Only do
             # this for this very first command to help get the BNO and board's
             # I2C into a clear state ready to accept the next commands.
+            print("error not swolled")
             pass
         # Make sure we're in config mode and on page 0.
         self._config_mode()
@@ -384,8 +386,10 @@ class BNO055(object):
         # Check the chip ID
         bno_id = self._read_byte(BNO055_CHIP_ID_ADDR)
         logger.debug('Read chip ID: 0x{0:02X}'.format(bno_id))
+
         if bno_id != BNO055_ID:
-            return False
+            print("bno_id not equivilantt to 0xA0", bno_id )
+            return False    
         # Reset the device.
         if self._rst is not None:
             # Use the hardware reset pin if provided.
@@ -397,6 +401,7 @@ class BNO055(object):
             # Else use the reset command.  Note that ack=False is sent because
             # the chip doesn't seem to ack a reset in serial mode (by design?).
             self._write_byte(BNO055_SYS_TRIGGER_ADDR, 0x20, ack=False)
+            print("reset command")
         # Wait 650ms after reset for chip to be ready (as suggested
         # in datasheet).
         time.sleep(0.65)
