@@ -298,7 +298,7 @@ class BNO055(object):
         # then expect an acknowledgement in serial mode, otherwise ignore any
         # acknowledgement (necessary when resetting the device).
         print("Adress", address)
-        print("Value", values)
+        print("Value", value)
         if self._i2c_device is not None:
             print("1")
             # I2C write.
