@@ -372,8 +372,11 @@ class BNO055(object):
         # First send a thow-away command and ignore any response or I2C errors
         # just to make sure the BNO is in a good state and ready to accept
         # commands (this seems to be necessary after a hard power down).
+        bno_id = self._read_byte(BNO055_CHIP_ID_ADDR)
+        print("save op mode and bnid",bno_id  )
         try:
             self._write_byte(BNO055_PAGE_ID_ADDR, 0, ack=False)
+            print("try to write")
         except IOError:
             # Swallow an IOError that might be raised by an I2C issue.  Only do
             # this for this very first command to help get the BNO and board's
