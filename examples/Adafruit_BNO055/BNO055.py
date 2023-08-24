@@ -297,10 +297,14 @@ class BNO055(object):
         # Write an 8-bit value to the provided register address.  If ack is True
         # then expect an acknowledgement in serial mode, otherwise ignore any
         # acknowledgement (necessary when resetting the device).
+        print("Adress", address)
+        print("Value", values)
         if self._i2c_device is not None:
+            print("1")
             # I2C write.
             self._i2c_device.write8(address, value)
         else:
+            print("2")
             # Build and send serial register write command.
             command = bytearray(5)
             command[0] = 0xAA  # Start byte
@@ -308,9 +312,11 @@ class BNO055(object):
             command[2] = address & 0xFF
             command[3] = 1     # Length (1 byte)
             command[4] = value & 0xFF
+            print("3")
             resp = self._serial_send(command, ack=ack)
             # Verify register write succeeded if there was an acknowledgement.
             if ack and resp[0] != 0xEE and resp[1] != 0x01:
+                print("4")
                 raise RuntimeError('Register write error: 0x{0}'.format(binascii.hexlify(resp)))
 
     def _read_bytes(self, address, length):
@@ -384,6 +390,7 @@ class BNO055(object):
             pass
         # Make sure we're in config mode and on page 0.
         self._config_mode()
+        print("config")
         self._write_byte(BNO055_PAGE_ID_ADDR, 0)
         # Check the chip ID
         print("writting worked")
