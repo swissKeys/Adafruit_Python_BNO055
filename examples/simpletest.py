@@ -26,9 +26,8 @@ import sys
 import time
 
 sys.path.append("Adafruit_BNO055")
-import BNO055
+from Adafruit_BNO055 import BNO055
 
-php-ldap
 
 
 
