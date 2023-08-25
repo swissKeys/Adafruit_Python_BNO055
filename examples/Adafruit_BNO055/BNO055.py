@@ -312,7 +312,6 @@ class BNO055(object):
             command[2] = address & 0xFF
             command[3] = 1     # Length (1 byte)
             command[4] = value & 0xFF
-            print("3")
             resp = self._serial_send(command, ack=ack)
             # Verify register write succeeded if there was an acknowledgement.
             if ack and resp[0] != 0xEE and resp[1] != 0x01:
