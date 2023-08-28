@@ -15,7 +15,7 @@ import time
 #TODO: func(array) return current
 #TODO: calc_volage(current) return voltage, power  
 
-def collect_array():
+def collect_array(axis, max_number):
     mocked_telemetry = [
     {'index': 0, 'pos_x': 0.0, 'pos_y': 0.2224, 'pos_z': 0.0, 'mag_x': 0.1, 'mag_y': 0.2, 'mag_z': 0.5},
     {'index': 1, 'pos_x': 0.0, 'pos_y': 0.2221, 'pos_z': 0.3, 'mag_x': 0.2, 'mag_y': 0.3, 'mag_z': 0.6},
@@ -46,27 +46,27 @@ def collect_array():
             'index': current_index,
             'pos_x': 0.0,
             'pos_y': 4.567,
-            'pos_z': latest_data_point["pos_z"] + random_pos_z,
+            'pos_z': latest_data_point["pos_"+ axis] + random_pos_z,
             'mag_x': 0.6 + random_variation,
             'mag_y': 0.7 + random_variation,
             'mag_z': 1.0 + random_variation,
         }
 
-        mocked_telemetry.sort(key=lambda data: data['pos_z'])
+        mocked_telemetry.sort(key=lambda data: data["pos_"+ axis])
         #print("Added new data point pos z:", new_data_point["pos_z"])
         #print("Added new data point mag z:", new_data_point["mag_z"])
 
         #print("latest data point:", latest_data_point)
         #print("last pos_z", latest_data_point["pos_z"])
         #print("new pos_z", new_data_point["pos_z"])
-        increment_step_size = increment_step_size + (new_data_point["pos_z"] - latest_data_point["pos_z"])
+        increment_step_size = increment_step_size + (new_data_point["pos_"+ axis] - latest_data_point["pos_"+ axis])
         #print("increment step size", increment_step_size)
-        if increment_step_size >= 5: 
+        if increment_step_size >= max_number: 
             #TODO: add to array and increase number_of_datapoints
             print("Sensor moved in 5 in pos z axis")
 
             number_of_datapoints += 1
-            data_point_results.append({'pos_z': new_data_point["pos_z"], 'mag_z': new_data_point["mag_z"]})
+            data_point_results.append({"pos_"+ axis: new_data_point["pos_"+ axis], "mag_"+ axis: new_data_point["mag_"+ axis]})
         #print("Added new data point:", new_data_point)
         if len(data_point_results) == 5:
             return data_point_results
@@ -84,9 +84,10 @@ def main():
     parser.add_argument('--distance_coils', type=float, required=False, default=0.2, help='Distance between coils')
     parser.add_argument('--number_turns', type=int, required=False, default=100, help='Number of turns in the coil')
     parser.add_argument('--measured_axis', type=str, required=False, default='z', help='Axis along which measurements are taken')
+    parser.add_argument('--number_of_datapoints', type=str, required=False, default=5, help='Number of data points to be collected')
     args = parser.parse_args()
 
-    magneto_data_array = collect_array()
+    magneto_data_array = collect_array(args.measured_axis, args.number_of_datapoints)
     print(magneto_data_array)
 
     """ 
