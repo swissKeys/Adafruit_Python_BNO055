@@ -68,7 +68,7 @@ def collect_array(axis, max_number):
             number_of_datapoints += 1
             data_point_results.append({"pos_"+ axis: new_data_point["pos_"+ axis], "mag_"+ axis: new_data_point["mag_"+ axis]})
         #print("Added new data point:", new_data_point)
-        if len(data_point_results) == 5:
+        if len(data_point_results) == max_number:
             return data_point_results
         time.sleep(1)  # Delay for 1 seconds
         # Add the new data point to the telemetry list
