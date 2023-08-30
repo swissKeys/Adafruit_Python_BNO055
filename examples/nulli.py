@@ -1,7 +1,24 @@
+# Magneticfield reading and nullification.
+#
+# Copyright (c) 2023 Bennedetta Kalemi and Rebecca Barth
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-
-#TODO: hello rebecca caspa
 
 import logging
 import argparse
@@ -12,9 +29,6 @@ import numpy as np
 from scipy.constants import *
 from helpers import D, B_z_s, zi
 
-#TODO: reiceive mockeed telemetry from sensor (pos x,y,z) and magneticfield values(x,y,z). the sensor is facked moved along the z axis.
-#TODO: collect_array(axis) use ongoing telemertry from sensor for z-axis. Save the value for magnetfield (z) and pos (z) every 5cm the sensor moves into positove z-direction Until we have 10 values. return list.
-#TODO: func(array) return current
 #TODO: calc_volage(current) return voltage, power  
 
 def collect_array(axis, number_of_datapoints, length_of_one_side):
@@ -109,6 +123,10 @@ def calculate_current(axis, magneto_data_array, number_turns, length_of_one_side
 
     return current_to_nulli_array
 
+def calc_voltage_power(current, resistance): 
+    voltage = 0.0
+    power = 0.0
+    return voltage, power
 def main():
     parser = argparse.ArgumentParser(description='Calculate voltage, power, and current')
     parser.add_argument('--resistance', type=float, required=False, default=0.1, help='Resistance of the wire')
@@ -122,14 +140,8 @@ def main():
     magneto_data_array = collect_array(args.measured_axis, args.number_of_datapoints, args.length_of_one_side)
     current_array = calculate_current(args.measured_axis, magneto_data_array, args.number_turns, args.length_of_one_side, args.distance_coils)  
     print(current_array)
-    """ 
-        telemetry_array, pos = collect_array(args.measured_axis)
-        current = calc_current(telemetry_array, pos)
-        voltage, power = calc_voltage_power(current, args.resistance)
-        
-        print(f"Voltage: {voltage:.2f} V")
-        print(f"Power: {power:.2f} W")
-        print(f"Current: {current:.2f} A") """
+    voltage, power = calc_voltage_power(current, args.resistance)
+    print(voltage)
 
 if __name__ == "__main__":
     main()
