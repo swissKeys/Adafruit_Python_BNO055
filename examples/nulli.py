@@ -1,7 +1,24 @@
+# Magneticfield reading and nullification.
+#
+# Copyright (c) 2023 Bennedetta Kalemi and Rebecca Barth
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-
-#TODO: hello rebecca caspa
 
 import logging
 import argparse
@@ -12,19 +29,16 @@ import numpy as np
 from scipy.constants import *
 from helpers import D, B_z_s, zi
 
-#TODO: reiceive mockeed telemetry from sensor (pos x,y,z) and magneticfield values(x,y,z). the sensor is facked moved along the z axis.
-#TODO: collect_array(axis) use ongoing telemertry from sensor for z-axis. Save the value for magnetfield (z) and pos (z) every 5cm the sensor moves into positove z-direction Until we have 10 values. return list.
-#TODO: func(array) return current
 #TODO: calc_volage(current) return voltage, power  
 
 def collect_array(axis, number_of_datapoints, length_of_one_side):
     mocked_telemetry = [
-    {'index': 0, 'pos_x': 0.0, 'pos_y': 0.2224, 'pos_z': 0.0, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 0.5},
-    {'index': 1, 'pos_x': 0.0, 'pos_y': 0.2221, 'pos_z': 0.3, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 0.5},
-    {'index': 2, 'pos_x': 0.0, 'pos_y': 0.4, 'pos_z': 0.7, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 0.5},
-    {'index': 3, 'pos_x': 0.0, 'pos_y': 0.6, 'pos_z': 1.2, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 0.5},
-    {'index': 4, 'pos_x': 0.0, 'pos_y': 0.8, 'pos_z': 1.7, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 0.5},
-    {'index': 5, 'pos_x': 0.0, 'pos_y': 1.0, 'pos_z': 2.2, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 0.5}
+    {'index': 0, 'pos_x': 0.0, 'pos_y': 0.2224, 'pos_z': 0.0, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
+    {'index': 1, 'pos_x': 0.0, 'pos_y': 0.2221, 'pos_z': 0.3, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
+    {'index': 2, 'pos_x': 0.0, 'pos_y': 0.4, 'pos_z': 0.7, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
+    {'index': 3, 'pos_x': 0.0, 'pos_y': 0.6, 'pos_z': 1.2, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
+    {'index': 4, 'pos_x': 0.0, 'pos_y': 0.8, 'pos_z': 1.7, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
+    {'index': 5, 'pos_x': 0.0, 'pos_y': 1.0, 'pos_z': 2.2, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00}
     ]
 
     # Initialize index for new data points
@@ -40,7 +54,7 @@ def collect_array(axis, number_of_datapoints, length_of_one_side):
         # Magnetometer data (in micro-Teslas):
         #x,y,z = bno.read_magnetometer()
         random_pos_z = random.uniform(0.01, 0.03)
-        #random_variation = random.uniform(-0.02, 0.02)
+        random_variation = random.uniform(-1, 1)
         latest_data_point = mocked_telemetry[current_index-1]
         new_data_point = {
             'index': current_index,
@@ -49,7 +63,7 @@ def collect_array(axis, number_of_datapoints, length_of_one_side):
             'pos_z': latest_data_point["pos_"+ axis] + random_pos_z,
             'mag_x': 0.6,
             'mag_y': 0.7,
-            'mag_z': 0.5,
+            'mag_z': 45.00 + random_variation,
         }
 
         mocked_telemetry.sort(key=lambda data: data["pos_"+ axis])
@@ -111,6 +125,10 @@ def calculate_current(axis, magneto_data_array, number_turns, length_of_one_side
     print("The current on average is", av)
     return current_to_nulli_array
 
+def calc_voltage_power(current, resistance): 
+    voltage = 0.0
+    power = 0.0
+    return voltage, power
 def main():
     parser = argparse.ArgumentParser(description='Calculate voltage, power, and current')
     parser.add_argument('--resistance', type=float, required=False, default=0.1, help='Resistance of the wire')
@@ -124,14 +142,8 @@ def main():
     magneto_data_array = collect_array(args.measured_axis, args.number_of_datapoints, args.length_of_one_side)
     current_array = calculate_current(args.measured_axis, magneto_data_array, args.number_turns, args.length_of_one_side, args.distance_coils)  
     print(current_array)
-    """ 
-        telemetry_array, pos = collect_array(args.measured_axis)
-        current = calc_current(telemetry_array, pos)
-        voltage, power = calc_voltage_power(current, args.resistance)
-        
-        print(f"Voltage: {voltage:.2f} V")
-        print(f"Power: {power:.2f} W")
-        print(f"Current: {current:.2f} A") """
+    voltage, power = calc_voltage_power(current, args.resistance)
+    print(voltage)
 
 if __name__ == "__main__":
     main()
