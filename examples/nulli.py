@@ -80,7 +80,8 @@ def collect_array(axis, number_of_datapoints, length_of_one_side):
 def calculate_current(axis, magneto_data_array, number_turns, length_of_one_side, distance_coils):
 
     N = number_turns  #number of turns of wire
-    z = np.linspace(-0.5, 0.5, len(magneto_data_array)) #in meters
+    z = np.linspace(-0.05, 0.05, len(magneto_data_array)) #in meters 1U CubeSat
+    #z = np.linspace(-0.05*3, 0.05*3, len(magneto_data_array)) #in meters 3U CubeSat
     L = length_of_one_side
     p = 0 
     z1 = z + distance_coils/2
