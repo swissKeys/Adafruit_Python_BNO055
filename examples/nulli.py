@@ -26,6 +26,8 @@ import time
 
 import random
 import numpy as np
+
+from Adafruit_BNO055 import BNO055
 from scipy.constants import *
 from helpers import D, B_z_s, zi
 
