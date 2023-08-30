@@ -19,12 +19,12 @@ from helpers import D, B_z_s, zi
 
 def collect_array(axis, number_of_datapoints, length_of_one_side):
     mocked_telemetry = [
-    {'index': 0, 'pos_x': 0.0, 'pos_y': 0.2224, 'pos_z': 0.0, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 0.5},
-    {'index': 1, 'pos_x': 0.0, 'pos_y': 0.2221, 'pos_z': 0.3, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 0.5},
-    {'index': 2, 'pos_x': 0.0, 'pos_y': 0.4, 'pos_z': 0.7, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 0.5},
-    {'index': 3, 'pos_x': 0.0, 'pos_y': 0.6, 'pos_z': 1.2, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 0.5},
-    {'index': 4, 'pos_x': 0.0, 'pos_y': 0.8, 'pos_z': 1.7, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 0.5},
-    {'index': 5, 'pos_x': 0.0, 'pos_y': 1.0, 'pos_z': 2.2, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 0.5}
+    {'index': 0, 'pos_x': 0.0, 'pos_y': 0.2224, 'pos_z': 0.0, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
+    {'index': 1, 'pos_x': 0.0, 'pos_y': 0.2221, 'pos_z': 0.3, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
+    {'index': 2, 'pos_x': 0.0, 'pos_y': 0.4, 'pos_z': 0.7, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
+    {'index': 3, 'pos_x': 0.0, 'pos_y': 0.6, 'pos_z': 1.2, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
+    {'index': 4, 'pos_x': 0.0, 'pos_y': 0.8, 'pos_z': 1.7, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
+    {'index': 5, 'pos_x': 0.0, 'pos_y': 1.0, 'pos_z': 2.2, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00}
     ]
 
     # Initialize index for new data points
@@ -40,7 +40,7 @@ def collect_array(axis, number_of_datapoints, length_of_one_side):
         # Magnetometer data (in micro-Teslas):
         #x,y,z = bno.read_magnetometer()
         random_pos_z = random.uniform(0.01, 0.03)
-        #random_variation = random.uniform(-0.02, 0.02)
+        random_variation = random.uniform(-1, 1)
         latest_data_point = mocked_telemetry[current_index-1]
         new_data_point = {
             'index': current_index,
@@ -49,7 +49,7 @@ def collect_array(axis, number_of_datapoints, length_of_one_side):
             'pos_z': latest_data_point["pos_"+ axis] + random_pos_z,
             'mag_x': 0.6,
             'mag_y': 0.7,
-            'mag_z': 0.5,
+            'mag_z': 45.00 + random_variation,
         }
 
         mocked_telemetry.sort(key=lambda data: data["pos_"+ axis])
