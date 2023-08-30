@@ -28,7 +28,7 @@ import random
 import numpy as np
 
 from Adafruit_BNO055 import BNO055
-from scipy.constants import *
+#from scipy.constants import *
 from helpers import D, B_z_s, zi
 
 #TODO: calc_volage(current) return voltage, power  
