@@ -39,7 +39,7 @@ def collect_array(axis, number_of_datapoints, length_of_one_side):
     while collecting_along_axis:
         # Magnetometer data (in micro-Teslas):
         #x,y,z = bno.read_magnetometer()
-        random_pos_z = random.uniform(1, 2)
+        random_pos_z = random.uniform(0.01, 0.03)
         #random_variation = random.uniform(-0.02, 0.02)
         latest_data_point = mocked_telemetry[current_index-1]
         new_data_point = {
@@ -68,6 +68,7 @@ def collect_array(axis, number_of_datapoints, length_of_one_side):
             increment_step_size = 0
 
         if len(data_point_results) == number_of_datapoints:
+            index = int(len(data_point_results)/2)
             return data_point_results
         time.sleep(1)  # Delay for 1 seconds
         # Add the new data point to the telemetry list
@@ -90,12 +91,8 @@ def calculate_current(axis, magneto_data_array, number_turns, length_of_one_side
     print(z2)
     for index, datapoint in enumerate(magneto_data_array): #is i for one axis bevause in teh code it is 1 
          magnetic_field.append(datapoint["mag_"+ axis])
-         current_to_nulli.append(datapoint["mag_"+ axis]*(4 * ((mu_0*N*L*L)/(np.pi)) * (1/(L*L + 4*z1[index]*z1[index])) * (1/(2*L*L + 4*z1[index]*z1[index])**0.5) * 1e4  
-         + 4 * ((mu_0*N*L*L)/(np.pi)) * (1/(L*L + 4*z2[index]*z2[index])) * (1/(2*L*L + 4*z2[index]*z2[index])**0.5) * 1e4)**-1)
-    #print(z[j], B_z_s(z1[i,j], I, N, L) + B_z_s(z2[i,j], I, N, L), I_null[j])
-
-    #plt.plot(z, B_z_s(z1[i,], I, N, L) + B_z_s(z2[i,], I, N, L))
-    #plt.plot(I_null)
+         current = datapoint["mag_"+ axis]*(4 * ((mu_0*N*L*L)/(np.pi)) * (1/(L*L + 4*z1[index]*z1[index])) * (1/(2*L*L + 4*z1[index]*z1[index])**0.5) * 1e4  + 4 * ((mu_0*N*L*L)/(np.pi)) * (1/(L*L + 4*z2[index]*z2[index])) * (1/(2*L*L + 4*z2[index]*z2[index])**0.5) * 1e4)**-1
+         current_to_nulli.append(current)
 
     #nullifying
     current_to_nulli_array = np.asarray(current_to_nulli)
@@ -118,7 +115,7 @@ def main():
     parser.add_argument('--distance_coils', type=float, required=False, default=0.54, help='Distance between coils')
     parser.add_argument('--number_turns', type=float, required=False, default=20.0, help='Number of turns in the coil')
     parser.add_argument('--measured_axis', type=str, required=False, default='z', help='Axis along which measurements are taken')
-    parser.add_argument('--number_of_datapoints', type=str, required=False, default=5, help='Number of data points to be collected')
+    parser.add_argument('--number_of_datapoints', type=str, required=False, default=50, help='Number of data points to be collected')
     args = parser.parse_args()
 
     magneto_data_array = collect_array(args.measured_axis, args.number_of_datapoints, args.length_of_one_side)
