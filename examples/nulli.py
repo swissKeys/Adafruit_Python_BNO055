@@ -54,7 +54,7 @@ def collect_array(axis, number_of_datapoints, length_of_one_side):
         # Magnetometer data (in micro-Teslas):
         #x,y,z = bno.read_magnetometer()
         random_pos_z = random.uniform(0.01, 0.03)
-        random_variation = random.uniform(-10, 10)
+        random_variation = random.uniform(-1, 1)
         latest_data_point = mocked_telemetry[current_index-1]
         new_data_point = {
             'index': current_index,
