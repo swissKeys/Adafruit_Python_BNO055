@@ -79,7 +79,7 @@ while True:
     #temp_c = bno.read_temp()
     # Magnetometer data (in micro-Teslas):
     x,y,z = bno.read_magnetometer()
-    print('mag_x={0} mag_y={1} mag_z={3}'.format(x, y, z))
+    print('mag_x={0} mag_y={1} mag_z={2}'.format(x, y, z))
     # Gyroscope data (in degrees per second):
     #x,y,z = bno.read_gyroscope()
     # Accelerometer data (in meters per second squared):
