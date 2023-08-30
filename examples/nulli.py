@@ -48,6 +48,7 @@ def collect_array(axis, number_of_datapoints, length_of_one_side):
         current_index = len(mocked_telemetry)
 
     """
+    bno = BNO055.BNO055(serial_port='/dev/serial0', rst=18)
 
     mag_x,mag_y,mag_z = bno.read_magnetometer()
 
