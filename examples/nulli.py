@@ -102,8 +102,8 @@ def calculate_current(axis, magneto_data_array, number_turns, length_of_one_side
     z2 = z - distance_coils/2
     current_to_nulli = []
     magnetic_field = []
-    print(z1)
-    print(z2)
+    #print(z1)
+    #print(z2)
     for index, datapoint in enumerate(magneto_data_array): #is i for one axis bevause in teh code it is 1 
          magnetic_field.append(datapoint["mag_"+ axis])
          current = datapoint["mag_"+ axis]*(4 * ((mu_0*N*L*L)/(np.pi)) * (1/(L*L + 4*z1[index]*z1[index])) * (1/(2*L*L + 4*z1[index]*z1[index])**0.5) *1e6  + 4 * ((mu_0*N*L*L)/(np.pi)) * (1/(L*L + 4*z2[index]*z2[index])) * (1/(2*L*L + 4*z2[index]*z2[index])**0.5) *1e6 )**-1
@@ -122,8 +122,7 @@ def calculate_current(axis, magneto_data_array, number_turns, length_of_one_side
             return
         
     av = np.average(current_to_nulli_array)
-    print("The current on average is", av)
-    return current_to_nulli_array
+    return av
 
 def calc_voltage_power(current, resistance): 
     voltage = 0.0
@@ -140,9 +139,9 @@ def main():
     args = parser.parse_args()
 
     magneto_data_array = collect_array(args.measured_axis, args.number_of_datapoints, args.length_of_one_side)
-    current_array = calculate_current(args.measured_axis, magneto_data_array, args.number_turns, args.length_of_one_side, args.distance_coils)  
-    print(current_array)
-    voltage, power = calc_voltage_power(current, args.resistance)
+    current_av = calculate_current(args.measured_axis, magneto_data_array, args.number_turns, args.length_of_one_side, args.distance_coils)  
+    print(current_av, "A")
+    voltage, power = calc_voltage_power(current_av, args.resistance)
     print(voltage)
 
 if __name__ == "__main__":
