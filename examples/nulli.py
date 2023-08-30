@@ -92,7 +92,7 @@ def calculate_current(axis, magneto_data_array, number_turns, length_of_one_side
     print(z2)
     for index, datapoint in enumerate(magneto_data_array): #is i for one axis bevause in teh code it is 1 
          magnetic_field.append(datapoint["mag_"+ axis])
-         current = datapoint["mag_"+ axis]*(4 * ((mu_0*N*L*L)/(np.pi)) * (1/(L*L + 4*z1[index]*z1[index])) * (1/(2*L*L + 4*z1[index]*z1[index])**0.5) * 1e4  + 4 * ((mu_0*N*L*L)/(np.pi)) * (1/(L*L + 4*z2[index]*z2[index])) * (1/(2*L*L + 4*z2[index]*z2[index])**0.5) * 1e4)**-1
+         current = datapoint["mag_"+ axis]*(4 * ((mu_0*N*L*L)/(np.pi)) * (1/(L*L + 4*z1[index]*z1[index])) * (1/(2*L*L + 4*z1[index]*z1[index])**0.5) *1e6  + 4 * ((mu_0*N*L*L)/(np.pi)) * (1/(L*L + 4*z2[index]*z2[index])) * (1/(2*L*L + 4*z2[index]*z2[index])**0.5) *1e6 )**-1
          current_to_nulli.append(current)
 
     #nullifying
@@ -106,7 +106,9 @@ def calculate_current(axis, magneto_data_array, number_turns, length_of_one_side
         if int(value) != 0: 
             print("failure")
             return
-
+        
+    av = np.average(current_to_nulli_array)
+    print("The current on average is", av)
     return current_to_nulli_array
 
 def main():
