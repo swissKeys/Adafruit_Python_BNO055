@@ -54,7 +54,7 @@ def collect_array(axis, number_of_datapoints, length_of_one_side):
         # Magnetometer data (in micro-Teslas):
         #x,y,z = bno.read_magnetometer()
         random_pos_z = random.uniform(0.01, 0.03)
-        random_variation = random.uniform(-1, 1)
+        random_variation = random.uniform(-10, 10)
         latest_data_point = mocked_telemetry[current_index-1]
         new_data_point = {
             'index': current_index,
@@ -113,8 +113,8 @@ def calculate_current(axis, magneto_data_array, number_turns, length_of_one_side
     current_to_nulli_array = np.asarray(current_to_nulli)
     magnetic_field_array = np.asarray(magnetic_field)
     B_null = B_z_s(z1, current_to_nulli_array, N, L) + B_z_s(z2, current_to_nulli_array, N, L)
-    print(B_null)
-    print(magnetic_field_array)
+    #print(B_null)
+    #print(magnetic_field_array)
     null_array = magnetic_field_array - B_null
     for value in null_array:
         if int(value) != 0: 
@@ -122,6 +122,13 @@ def calculate_current(axis, magneto_data_array, number_turns, length_of_one_side
             return
         
     av = np.average(current_to_nulli_array)
+    current_to_nulli_av =[]
+    for value in current_to_nulli:
+        current_to_nulli_av.append(av)
+    current_to_nulli_av= np.asarray(current_to_nulli_av)
+    B_null_av = B_z_s(z1, current_to_nulli_av, N, L) + B_z_s(z2, current_to_nulli_av, N, L)
+    null_array_av = magnetic_field_array - B_null_av
+    print(null_array_av)
     return av
 
 def calc_voltage_power(current, resistance): 
