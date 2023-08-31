@@ -125,6 +125,7 @@ def calculate_current(magneto_data_array, number_turns, length_of_one_side, dist
     current_to_nulli = []
     magnetic_field = []
     
+    mu_0 = 1.25663706212e-06
     index = 0
     while index <len(magneto_data_array): 
          magnetic_field.append(magneto_data_array[index])
