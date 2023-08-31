@@ -125,7 +125,6 @@ def calculate_current(magneto_data_array, number_turns, length_of_one_side, dist
     current_to_nulli = []
     magnetic_field = []
     
-    mu_0 = 1.25663706212e-06
     index = 0
     while index <len(magneto_data_array): 
          magnetic_field.append(magneto_data_array[index])
@@ -168,7 +167,7 @@ def main():
     parser.add_argument('--distance_coils', type=float, required=False, default=0.54, help='Distance between coils')
     parser.add_argument('--number_turns', type=float, required=False, default=20.0, help='Number of turns in the coil')
     parser.add_argument('--measured_axis', type=str, required=False, default='z', help='Axis along which measurements are taken')
-    parser.add_argument('--number_of_datapoints', type=str, required=False, default=5, help='Number of data points to be collected')
+    parser.add_argument('--number_of_datapoints', type=str, required=False, default=20, help='Number of data points to be collected')
     args = parser.parse_args()
 
     magneto_data_array = collect_array_real_data(args.number_of_datapoints)
