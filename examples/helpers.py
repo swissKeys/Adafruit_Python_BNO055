@@ -30,4 +30,4 @@ def D(le, p):
     return D
 
 def B_z_s(z, I, N, L):
-    return 4 * ((1.25663706212e-06*I*N*L*L)/(np.pi)) * (1/(L*L + 4*z*z)) * (1/(2*L*L + 4*z*z)**0.5) * 1e6
+    return 4 * ((mu_0*I*N*L*L)/(np.pi)) * (1/(L*L + 4*z*z)) * (1/(2*L*L + 4*z*z)**0.5) * 1e6
