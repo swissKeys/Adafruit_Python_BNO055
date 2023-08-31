@@ -22,51 +22,69 @@
 
 import logging
 import argparse
+import sys
 import time
 
 import random
 import numpy as np
-from scipy.constants import *
+
+from Adafruit_BNO055 import BNO055
+#from scipy.constants import *
 from helpers import D, B_z_s, zi
 
 #TODO: calc_volage(current) return voltage, power  
 
 def collect_array(axis, number_of_datapoints, length_of_one_side):
-    mocked_telemetry = [
-    {'index': 0, 'pos_x': 0.0, 'pos_y': 0.2224, 'pos_z': 0.0, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
-    {'index': 1, 'pos_x': 0.0, 'pos_y': 0.2221, 'pos_z': 0.3, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
-    {'index': 2, 'pos_x': 0.0, 'pos_y': 0.4, 'pos_z': 0.7, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
-    {'index': 3, 'pos_x': 0.0, 'pos_y': 0.6, 'pos_z': 1.2, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
-    {'index': 4, 'pos_x': 0.0, 'pos_y': 0.8, 'pos_z': 1.7, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
-    {'index': 5, 'pos_x': 0.0, 'pos_y': 1.0, 'pos_z': 2.2, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00}
-    ]
+    """     mocked_telemetry = [
+        {'index': 0, 'pos_x': 0.0, 'pos_y': 0.2224, 'pos_z': 0.0, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
+        {'index': 1, 'pos_x': 0.0, 'pos_y': 0.2221, 'pos_z': 0.3, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
+        {'index': 2, 'pos_x': 0.0, 'pos_y': 0.4, 'pos_z': 0.7, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
+        {'index': 3, 'pos_x': 0.0, 'pos_y': 0.6, 'pos_z': 1.2, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
+        {'index': 4, 'pos_x': 0.0, 'pos_y': 0.8, 'pos_z': 1.7, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
+        {'index': 5, 'pos_x': 0.0, 'pos_y': 1.0, 'pos_z': 2.2, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00}
+        ]
 
-    # Initialize index for new data points
-    current_index = len(mocked_telemetry)
+        # Initialize index for new data points
+        current_index = len(mocked_telemetry)
 
-    # Simulate ongoing data flow
+    """
+    bno = BNO055.BNO055(serial_port='/dev/serial0', rst=18)
+
+    mag_x,mag_y,mag_z = bno.read_magnetometer()
+
+    telemetry = [
+        {'index': 0, 'pos_x': 0.0, 'pos_y': 0.2224, 'pos_z': 0.0, 'mag_x': mag_x, 'mag_y': mag_y, 'mag_z': mag_z}
+        ]
+    print(telemetry)
+
+            # Simulate ongoing data flow
     collecting_along_axis = True
     max_increment_step = length_of_one_side/number_of_datapoints
     increment_step_size = 0
     data_point_results = []
 
+    current_index = len(telemetry) #more devine: start collecting in look but lets see
+
     while collecting_along_axis:
         # Magnetometer data (in micro-Teslas):
         #x,y,z = bno.read_magnetometer()
         random_pos_z = random.uniform(0.01, 0.03)
-        random_variation = random.uniform(-10, 10)
-        latest_data_point = mocked_telemetry[current_index-1]
+        #random_variation = random.uniform(-1, 1)
+
+        latest_data_point = mocked_telemetry[current_index]
+        
+        mag_x,mag_y,mag_z = bno.read_magnetometer()
         new_data_point = {
-            'index': current_index,
+            'index': current_index + 1,
             'pos_x': 0.0,
             'pos_y': 4.567,
             'pos_z': latest_data_point["pos_"+ axis] + random_pos_z,
-            'mag_x': 0.6,
-            'mag_y': 0.7,
-            'mag_z': 45.00 + random_variation,
+            'mag_x': mag_x,
+            'mag_y': mag_y,
+            'mag_z': mag_z,
         }
-
-        mocked_telemetry.sort(key=lambda data: data["pos_"+ axis])
+        print(telemetry)
+        telemetry.sort(key=lambda data: data["pos_"+ axis]) #TODO: check this function
         #print("Added new data point pos z:", new_data_point["pos_z"])
         #print("Added new data point mag z:", new_data_point["mag_z"])
 
@@ -144,6 +162,36 @@ def main():
     parser.add_argument('--measured_axis', type=str, required=False, default='z', help='Axis along which measurements are taken')
     parser.add_argument('--number_of_datapoints', type=str, required=False, default=50, help='Number of data points to be collected')
     args = parser.parse_args()
+
+
+    bno = BNO055.BNO055(serial_port='/dev/serial0', rst=18)
+
+    # Enable verbose debug logging if -v is passed as a parameter.
+    if len(sys.argv) == 2 and sys.argv[1].lower() == '-v':
+        logging.basicConfig(level=logging.DEBUG)
+
+    # Initialize the BNO055 and stop if something went wrong.
+    if not bno.begin():
+        raise RuntimeError('Failed to initialize BNO055! Is the sensor connected?')
+    
+    # Print system status and self test result.
+    status, self_test, error = bno.get_system_status()
+    print('System status: {0}'.format(status))
+    print('Self test result (0x0F is normal): 0x{0:02X}'.format(self_test))
+    # Print out an error if system status is in error mode.
+    if status == 0x01:
+        print('System error: {0}'.format(error))
+        print('See datasheet section 4.3.59 for the meaning.')
+
+    # Print BNO055 software revision and other diagnostic data.
+    sw, bl, accel, mag, gyro = bno.get_revision()
+    print('Software version:   {0}'.format(sw))
+    print('Bootloader version: {0}'.format(bl))
+    print('Accelerometer ID:   0x{0:02X}'.format(accel))
+    print('Magnetometer ID:    0x{0:02X}'.format(mag))
+    print('Gyroscope ID:       0x{0:02X}\n'.format(gyro))
+
+    print('Reading BNO055 data, press Ctrl-C to quit...')
 
     magneto_data_array = collect_array(args.measured_axis, args.number_of_datapoints, args.length_of_one_side)
     current_av = calculate_current(args.measured_axis, magneto_data_array, args.number_turns, args.length_of_one_side, args.distance_coils)  
