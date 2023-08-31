@@ -92,7 +92,7 @@ def collect_array_real_data(number_of_datapoints):
         B_x[index] = x
         B_y[index] = y
         B_z[index] = z
-        print('B_z = {2:0.2F}'.format(B_z[index]))
+        print('B_z = {2}'.format(B_z[index]))
         # Gyroscope data (in degrees per second):
         #x,y,z = bno.read_gyroscope()
         # Accelerometer data (in meters per second squared):
