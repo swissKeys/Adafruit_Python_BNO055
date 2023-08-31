@@ -69,9 +69,9 @@ def collect_array_real_data(number_of_datapoints):
     print('Gyroscope ID:       0x{0:02X}\n'.format(gyro))
     
     index = 0
-    B_x = np.zeros(len(number_of_datapoints))
-    B_y = np.zeros(len(number_of_datapoints))
-    B_z = np.zeros(len(number_of_datapoints))
+    B_x = np.zeros(number_of_datapoints)
+    B_y = np.zeros(number_of_datapoints)
+    B_z = np.zeros(number_of_datapoints)
 
 
     while index<number_of_datapoints:                                                                                    #CAMBIARE
