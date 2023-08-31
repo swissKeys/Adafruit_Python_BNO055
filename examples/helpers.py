@@ -2,6 +2,7 @@ import numpy as np
 from scipy.constants import *
 
 def gamma(p):
+    
     gamma0 = 0.5445
     gamma1 = np.zeros(3)
     gamma1[0] = (gamma0 + (p * gamma0) / 100)
@@ -11,6 +12,7 @@ def gamma(p):
 
 def zi(le, z, p):
     i = 0
+
     z1= np.zeros((3, len(z)))
     z2= np.zeros((3, len(z)))
 
@@ -28,4 +30,5 @@ def D(le, p):
     return D
 
 def B_z_s(z, I, N, L):
+    mu_0 = 1.25663706212e-06
     return 4 * ((mu_0*I*N*L*L)/(np.pi)) * (1/(L*L + 4*z*z)) * (1/(2*L*L + 4*z*z)**0.5) * 1e6
