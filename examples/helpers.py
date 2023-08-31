@@ -2,7 +2,6 @@ import numpy as np
 from scipy.constants import *
 
 def gamma(p):
-    
     gamma0 = 0.5445
     gamma1 = np.zeros(3)
     gamma1[0] = (gamma0 + (p * gamma0) / 100)
