@@ -26,5 +26,5 @@ setup(name              = 'Adafruit_BNO055',
       classifiers       = classifiers,
       url               = 'https://github.com/adafruit/Adafruit_Python_BNO055/',
       dependency_links  = ['https://github.com/adafruit/Adafruit_Python_GPIO/tarball/master#egg=Adafruit-GPIO-0.9.3'],
-      install_requires  = ['Adafruit-GPIO>=0.9.3', 'pyserial','scipy'],
+      install_requires  = ['Adafruit-GPIO>=0.9.3', 'pyserial','scipy', 'requests'],
       packages          = find_packages())

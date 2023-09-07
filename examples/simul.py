@@ -23,17 +23,59 @@
 import logging
 import argparse
 import time
+import json
+import requests
+import os
 
 import random
 import numpy as np
 from scipy.constants import *
 from helpers import D, B_z_s, zi
 
-#TODO: calc_volage(current) return voltage, power  
+from dotenv import load_dotenv
+import os
 
+# Get the full path to the .env file
+dotenv_path = os.path.abspath('.env')
+
+try:
+    load_dotenv(dotenv_path)
+except Exception as e:
+    print(f"Error loading .env file: {e}")
+
+api_key = os.environ.get('API_KEY')
 
 def collect_data_geomagnetic_array(number_of_datapoints): #coordinates
-    geomagnetic_field = np.ones(number_of_datapoints)*45 #this last number 45 should be taken from a database, now it's 45 just to try something
+
+    headers = {"API-Key" : api_key}
+
+    hostname = "https://geomag.amentum.io/wmm/magnetic_field"
+
+    params = dict(
+        altitude = 10, # [km]
+        longitude = 100, # [deg]
+        latitude = 80, 
+        year = 2020.5 # decimal year, half-way through 2020
+    )
+    try: 
+        response = requests.get(hostname, params=params, headers=headers)
+        # extract JSON payload of response as Python dictionary
+        json_payload = response.json()
+        # raise an Exception if we encoutnered any HTTP error codes like 404 
+        response.raise_for_status()
+    except requests.exceptions.ConnectionError as e: 
+    # handle any typo errors in url or endpoint, or just patchy internet connection
+        print(e)
+    except requests.exceptions.HTTPError as e:  
+    # handle HTTP error codes in the response
+        print(e, json_payload['error'])
+    except requests.exceptions.RequestException as e:  
+    # general error handling
+        print(e, json_payload['error'])
+    else:
+        json_payload = response.json()
+        print(json.dumps(json_payload, indent=4, sort_keys=True))
+        geomagnetic_field = json.dumps(json_payload, indent=4, sort_keys=True)
     return geomagnetic_field
 
 def calculate_current(axis, geomagneto_data_array, number_turns, length_of_one_side, distance_coils):
@@ -159,6 +201,11 @@ def main():
     parser.add_argument('--number_turns', type=float, required=False, default=20.0, help='Number of turns in the coil')
     parser.add_argument('--measured_axis', type=str, required=False, default='z', help='Axis along which measurements are taken')
     parser.add_argument('--number_of_datapoints', type=str, required=False, default=3, help='Number of data points to be collected')
+    parser.add_argument('--altitude', type=int, required=False, default=10, help='altitude')
+    parser.add_argument('--longitude', type=int, required=False, default=10, help='longitude')
+    parser.add_argument('--latitude', type=int, required=False, default=10, help='latitude')
+    parser.add_argument('--year', type=float, required=False, default=2020.5, help='`year`')
+
     args = parser.parse_args()
 
     geomagneto_data_array = collect_data_geomagnetic_array(args.number_of_datapoints) #coordinates
