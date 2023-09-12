@@ -20,11 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import logging
 import argparse
-import time
-
-import random
 import numpy as np
 from scipy.constants import *
 from helpers import D, B_z_s, zi

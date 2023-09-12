@@ -153,6 +153,7 @@ def calc_voltage_power(current, resistance):
     voltage = 0.0
     power = 0.0
     return voltage, power
+
 def main():
     parser = argparse.ArgumentParser(description='Calculate voltage, power, and current')
     parser.add_argument('--resistance', type=float, required=False, default=0.1, help='Resistance of the wire')
