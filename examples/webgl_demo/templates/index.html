@@ -94,24 +94,24 @@
         // with the model instance and should add a model property with a Three.js
         // scene graph object that will be rendered.
         var models = [
-          {
+        {
             name: 'Cube',
             load: function(model) {
-              objMTLLoader.load(
-                '{{ url_for('static', filename='cube.obj') }}',
-                '{{ url_for('static', filename='blank.mtl') }}',
-                function(object) {
-                  var geom = object.children[1].geometry;
-                  // Rebuild geometry normals because they aren't loaded properly.
-                  geom.computeFaceNormals();
-                  geom.computeVertexNormals();
-                  // Build bunny mesh from geometry and material.
-                  model.model = new THREE.Mesh(geom, material);
-                  // Move the bunny so it's roughly in the center of the screen.
-                  model.model.scale.set(0.5, 0.5, 0.5);
-                  model.model.position.y = -100;
-                }
-              );
+              // Create a cube geometry.
+              var geometry = new THREE.BoxGeometry(1, 1, 1);
+
+              // Create a material for the cube (you can customize this).
+              var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+
+              // Create the cube mesh.
+              model.model = new THREE.Mesh(geometry, material);
+
+              // Position the cube as desired.
+              model.model.position.set(0, 0, 0);
+
+              // Add the cube to the scene or do other operations as needed.
+
+              // Now, you can use `model.model` to access and manipulate the cube mesh.
             }
           },
           {
