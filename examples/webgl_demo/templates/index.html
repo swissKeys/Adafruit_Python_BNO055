@@ -42,6 +42,9 @@
             <h4>Heading = <span id="heading">0</span></h4>
             <h4>Roll = <span id="roll">0</span></h4>
             <h4>Pitch = <span id="pitch">0</span></h4>
+            <h4>mag_x = <span id="mag_x">0</span></h4>
+            <h4>mag_x = <span id="mag_x">0</span></h4>
+            <h4>mag_z = <span id="mag_z">0</span></h4>
           </div>
           <div class="col-sm-4">
             <h3>Calibration:</h3>
@@ -275,6 +278,9 @@
           $('#calGyro').text(data.calGyro);
           $('#calAccel').text(data.calAccel);
           $('#calMag').text(data.calMag);
+          $('#mag_x').text(data.mag_x);
+          $('#mag_y').text(data.mag_y);
+          $('#mag_z').text(data.mag_z);
         }
 
         // Create server sent event connection to receive BNO sensor data.

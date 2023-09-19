@@ -88,10 +88,12 @@ def read_bno():
     """
     while True:
         # Grab new BNO sensor readings.
+
         temp = bno.read_temp()
         heading, roll, pitch = bno.read_euler()
         x, y, z, w = bno.read_quaternion()
         sys, gyro, accel, mag = bno.get_calibration_status()
+        mag_x ,mag_y, mag_z = bno.read_magnetometer()
         status, self_test, error = bno.get_system_status(run_self_test=False)
         if error != 0:
             print 
@@ -103,6 +105,7 @@ def read_bno():
             bno_data['temp'] = temp
             bno_data['quaternion'] = (x, y, z, w)
             bno_data['calibration'] = (sys, gyro, accel, mag)
+            mag_x ,mag_y, mag_z = bno_data['magneto']   
             # Notify any waiting threads that the BNO state has been updated.
             bno_changed.notifyAll()
         # Sleep until the next reading.
@@ -128,10 +131,12 @@ def bno_sse():
             temp = bno_data['temp']
             x, y, z, w = bno_data['quaternion']
             sys, gyro, accel, mag = bno_data['calibration']
+            mag_x ,mag_y, mag_z = bno_data['magneto']
         # Send the data to the connected client in HTML5 server sent event format.
         data = {'heading': heading, 'roll': roll, 'pitch': pitch, 'temp': temp,
                 'quatX': x, 'quatY': y, 'quatZ': z, 'quatW': w,
-                'calSys': sys, 'calGyro': gyro, 'calAccel': accel, 'calMag': mag }
+                'calSys': sys, 'calGyro': gyro, 'calAccel': accel, 'calMag': mag,
+                'mag_x': mag_x, 'mag_y': mag_y, 'mag_z': mag_z}
         yield 'data: {0}\n\n'.format(json.dumps(data))
 
 
