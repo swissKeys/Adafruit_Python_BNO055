@@ -96,7 +96,7 @@ def calculate_current(axis, geomagneto_data_array, number_turns, length_of_one_s
     return I_simul_av, np.average(B_simul_av)
 
 def calc_voltage_power(current, resistance): 
-    #TODO: unit check
+    #TODO: unit check, resisntence
     voltage = current*resistance
     power = voltage*current
 

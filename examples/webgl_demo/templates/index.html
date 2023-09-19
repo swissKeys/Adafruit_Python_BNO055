@@ -92,11 +92,11 @@
         // scene graph object that will be rendered.
         var models = [
           {
-            name: 'Bunny',
+            name: 'Cube',
             load: function(model) {
               objMTLLoader.load(
-                '{{ url_for('static', filename='bunny.obj') }}',
-                '{{ url_for('static', filename='bunny.mtl') }}',
+                '{{ url_for('static', filename='cube.obj') }}',
+                '{{ url_for('static', filename='blank.mtl') }}',
                 function(object) {
                   var geom = object.children[1].geometry;
                   // Rebuild geometry normals because they aren't loaded properly.
