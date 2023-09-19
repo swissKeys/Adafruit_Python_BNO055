@@ -95,7 +95,8 @@ def read_bno():
         sys, gyro, accel, mag = bno.get_calibration_status()
         status, self_test, error = bno.get_system_status(run_self_test=False)
         if error != 0:
-            print 'Error! Value: {0}'.format(error)
+            print 
+            'Error! Value: {0}'.format(error)
         # Capture the lock on the bno_changed condition so the bno_data shared
         # state can be updated.
         with bno_changed:
