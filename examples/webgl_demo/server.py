@@ -81,7 +81,6 @@ bno_changed = threading.Condition()
 # the first request is served (see start_bno_thread below).
 bno_thread = None
 
-
 def read_bno():
     """Function to read the BNO sensor and update the bno_data object with the
     latest BNO orientation, etc. state.  Must be run in its own thread because
