@@ -150,9 +150,12 @@ def calculate_current(axis, magneto_data_array, number_turns, length_of_one_side
     return av
 
 def calc_voltage_power(current, resistance): 
-    voltage = 0.0
-    power = 0.0
+    #TODO: unit check
+    voltage = current*resistance
+    power = voltage*current
+
     return voltage, power
+
 
 def main():
     parser = argparse.ArgumentParser(description='Calculate voltage, power, and current')

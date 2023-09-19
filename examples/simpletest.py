@@ -89,6 +89,7 @@ while True:
     #x,y,z = bno.read_linear_acceleration()
     # Gravity acceleration data (i.e. acceleration just from gravity--returned
     # in meters per second squared):
-    #x,y,z = bno.read_gravity()
+    x,y,z = bno.read_gravity()
+    print('grav_x={0} grav_y={1} grav_z={2}'.format(x, y, z))
     # Sleep for a second until the next reading.
     time.sleep(1)
