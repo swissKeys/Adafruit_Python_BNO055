@@ -105,7 +105,7 @@ def read_bno():
             bno_data['temp'] = temp
             bno_data['quaternion'] = (x, y, z, w)
             bno_data['calibration'] = (sys, gyro, accel, mag)
-            mag_x ,mag_y, mag_z = bno_data['magneto']   
+            bno_data['magnetometer']  = (mag_x ,mag_y, mag_z)
             # Notify any waiting threads that the BNO state has been updated.
             bno_changed.notifyAll()
         # Sleep until the next reading.
@@ -131,7 +131,7 @@ def bno_sse():
             temp = bno_data['temp']
             x, y, z, w = bno_data['quaternion']
             sys, gyro, accel, mag = bno_data['calibration']
-            mag_x ,mag_y, mag_z = bno_data['magneto']
+            mag_x ,mag_y, mag_z = bno_data['magnetometer']
         # Send the data to the connected client in HTML5 server sent event format.
         data = {'heading': heading, 'roll': roll, 'pitch': pitch, 'temp': temp,
                 'quatX': x, 'quatY': y, 'quatZ': z, 'quatW': w,
