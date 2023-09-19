@@ -170,7 +170,7 @@
         // Setup Three.js WebGL renderer and add it to the page.
         var renderer = new THREE.WebGLRenderer();
         renderer.setSize(sceneWidth, sceneHeight);
-        renderer.setClearColor(0xff0001, 0);
+        renderer.setClearColor(0xff000, 0);
         $('#renderer').append(renderer.domElement);
         $('#renderer canvas').addClass('center-block');  // Center the renderer.
 
@@ -188,6 +188,15 @@
         var backLight = new THREE.DirectionalLight(0xffff, 0.3);
         backLight.position.set(0, -0.25, -1);
         scene.add(backLight);
+
+        //Load background texture
+        const loader = new THREE.TextureLoader();
+        loader.load('https://images.pexels.com/photos/956981/milky-way-starry-sky-night-sky-star-956981.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' , function(texture)
+                    {
+                    scene.background = texture;  
+                    });
+
+        
 
         // Create a couple groups to apply rotations to the 3D model at different
         // stages.  The outer group called offset is set to the reverse rotation
