@@ -194,7 +194,7 @@
         var backLight = new THREE.DirectionalLight(0xffff, 0.3);
         backLight.position.set(0, -0.25, -1);
         var textureLoader = new THREE.TextureLoader();
-        var backgroundTexture = textureLoader.load('earth.jpeg');
+        var backgroundTexture = textureLoader.load("https://www.9minecraft.net/wp-content/uploads/2022/11/1-Beautiful-Cubemaps-Pack-MCPE.jpg");
         var backgroundGeometry = new THREE.PlaneGeometry(2, 2); // Create a square geometry.
         var backgroundMaterial = new THREE.MeshBasicMaterial({ map: backgroundTexture });
 
