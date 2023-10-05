@@ -193,17 +193,22 @@
         scene.add(pointLight2);
         var backLight = new THREE.DirectionalLight(0xffff, 0.3);
         backLight.position.set(0, -0.25, -1);
+
         var textureLoader = new THREE.TextureLoader();
-        var backgroundTexture = textureLoader.load("https://www.9minecraft.net/wp-content/uploads/2022/11/1-Beautiful-Cubemaps-Pack-MCPE.jpg");
-        var backgroundGeometry = new THREE.PlaneGeometry(2, 2); // Create a square geometry.
-        var backgroundMaterial = new THREE.MeshBasicMaterial({ map: backgroundTexture });
+        var backgroundTexture = textureLoader.load("https://www.9minecraft.net/wp-content/uploads/2022/11/1-Beautiful-Cubemaps-Pack-MCPE.jpg", function (texture) {
+            // Once the texture is loaded, create the material and mesh.
+            var backgroundMaterial = new THREE.MeshBasicMaterial({ map: texture });
+            
+            // Create the background mesh.
+            var backgroundGeometry = new THREE.PlaneGeometry(2, 2); // Create a square geometry.
+            var backgroundMesh = new THREE.Mesh(backgroundGeometry, backgroundMaterial);
+            
+            // Ensure it's always rendered behind other objects.
+            backgroundMesh.material.depthTest = false;
 
-        // Create the background mesh.
-        var backgroundMesh = new THREE.Mesh(backgroundGeometry, backgroundMaterial);
-        backgroundMesh.material.depthTest = false; // Ensure it's always rendered behind other objects.
-
-        // Add the background mesh to the scene.
-        scene.add(backgroundMesh);
+            // Add the background mesh to the scene.
+            scene.add(backgroundMesh);
+        });
 
         scene.add(backLight);
 
