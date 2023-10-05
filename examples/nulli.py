@@ -32,28 +32,42 @@ from Adafruit_BNO055 import BNO055
 #from scipy.constants import *
 from helpers import D, B_z_s, zi
 
-#TODO: calc_volage(current) return voltage, power  
+# Initialize variables for storing current velocity and position
+current_velocity = [0, 0, 0]  # Initialize with zero velocity
+current_position = [0, 0, 0]  # Initialize at the origin
+
+# Function to calculate displacement from acceleration data
+def calculate_displacement_from_acceleration(acceleration, time_interval):
+    # Using the equations of motion to calculate displacement
+    displacement = [0, 0, 0]
+    for i in range(3):
+        displacement[i] = current_velocity[i] * time_interval + 0.5 * acceleration[i] * (time_interval ** 2)
+    return displacement
+
+# Function to update velocity based on acceleration
+def update_velocity(acceleration, time_interval):
+    for i in range(3):
+        current_velocity[i] += acceleration[i] * time_interval
 
 def collect_array(axis, number_of_datapoints, length_of_one_side):
-    """     mocked_telemetry = [
-        {'index': 0, 'pos_x': 0.0, 'pos_y': 0.2224, 'pos_z': 0.0, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
-        {'index': 1, 'pos_x': 0.0, 'pos_y': 0.2221, 'pos_z': 0.3, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
-        {'index': 2, 'pos_x': 0.0, 'pos_y': 0.4, 'pos_z': 0.7, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
-        {'index': 3, 'pos_x': 0.0, 'pos_y': 0.6, 'pos_z': 1.2, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
-        {'index': 4, 'pos_x': 0.0, 'pos_y': 0.8, 'pos_z': 1.7, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00},
-        {'index': 5, 'pos_x': 0.0, 'pos_y': 1.0, 'pos_z': 2.2, 'mag_x': 0.6, 'mag_y': 0.7, 'mag_z': 45.00}
-        ]
 
-        # Initialize index for new data points
-        current_index = len(mocked_telemetry)
-
-    """
     bno = BNO055.BNO055(serial_port='/dev/serial0', rst=18)
 
     mag_x,mag_y,mag_z = bno.read_magnetometer()
+    acc_x,acc_y,acc_z = bno.read_accelerometer()
 
+    # Calculate displacement from acceleration    
+    displacement_from_acceleration = calculate_displacement_from_acceleration([acc_x, acc_y, acc_z], 0.01)
+
+    # Update current position
+    
+    for i in range(3):
+        current_position[i] += displacement_from_acceleration[i]
+
+    # Print the current position
+    print("Current Position (x, y, z):", current_position)
     telemetry = [
-        {'index': 0, 'pos_x': 0.0, 'pos_y': 0.2224, 'pos_z': 0.0, 'mag_x': mag_x, 'mag_y': mag_y, 'mag_z': mag_z}
+        {'index': 0, 'pos_x': current_position[0], 'pos_y': current_position[1], 'pos_z': current_position[2], 'mag_x': mag_x, 'mag_y': mag_y, 'mag_z': mag_z}
         ]
     print(telemetry)
 
@@ -71,9 +85,10 @@ def collect_array(axis, number_of_datapoints, length_of_one_side):
         random_pos_z = random.uniform(0.01, 0.03)
         #random_variation = random.uniform(-1, 1)
 
-        latest_data_point = mocked_telemetry[current_index]
+        latest_data_point = telemetry[current_index]
         
-        mag_x,mag_y,mag_z = bno.read_magnetometer()
+        mag_x,mag_y,mag_z = bno.read_magnetometer()   
+
         new_data_point = {
             'index': current_index + 1,
             'pos_x': 0.0,
@@ -102,7 +117,7 @@ def collect_array(axis, number_of_datapoints, length_of_one_side):
         if len(data_point_results) == number_of_datapoints:
             index = int(len(data_point_results)/2)
             return data_point_results
-        time.sleep(1)  # Delay for 1 seconds
+        time.sleep(0.01)  # Delay for 1 seconds
         # Add the new data point to the telemetry list
         mocked_telemetry.append(new_data_point)
         

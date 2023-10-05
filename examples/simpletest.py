@@ -104,6 +104,7 @@ while True:
     #print('grav_x={0} grav_y={1} grav_z={2}'.format(x, y, z))
     # Sleep for a second until the next reading.
     mag_x,mag_y,mag_z = bno.read_magnetometer()
+    print('mag_x={0} mag_y={1} mag_z={2}'.format(x, y, z))
     acc_x,acc_y,acc_z = bno.read_accelerometer()
     displacement_from_acceleration = calculate_displacement_from_acceleration([acc_x, acc_y, acc_z], 1.00)
 
@@ -114,6 +115,6 @@ while True:
     print("Current Position (x, y, z):", current_position)
     telemetry = [
         {'index': 0, 'pos_x': current_position[0], 'pos_y': current_position[1], 'pos_z': current_position[2], 'mag_x': mag_x, 'mag_y': mag_y, 'mag_z': mag_z}
-        ]
+        ] 
     print(telemetry)
     time.sleep(1)
