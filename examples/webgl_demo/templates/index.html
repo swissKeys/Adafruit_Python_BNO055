@@ -45,6 +45,9 @@
             <h4>mag_x = <span id="mag_x">0</span></h4>
             <h4>mag_y = <span id="mag_y">0</span></h4>
             <h4>mag_z = <span id="mag_z">0</span></h4>
+            <h4>acc_x = <span id="acc_x">0</span></h4>
+            <h4>acc_y = <span id="acc_y">0</span></h4>
+            <h4>acc_z = <span id="acc_z">0</span></h4>
           </div>
           <div class="col-sm-4">
             <h3>Calibration:</h3>
@@ -274,6 +277,9 @@
           $('#mag_x').text(data.mag_x);
           $('#mag_y').text(data.mag_y);
           $('#mag_z').text(data.mag_z);
+          $('#acc_x').text(data.acc_x);
+          $('#acc_y').text(data.acc_y);
+          $('#acc_z').text(data.acc_z);
         }
 
         // Create server sent event connection to receive BNO sensor data.
