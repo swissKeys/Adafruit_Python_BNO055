@@ -65,6 +65,17 @@ print('Magnetometer ID:    0x{0:02X}'.format(mag))
 print('Gyroscope ID:       0x{0:02X}\n'.format(gyro))
 
 print('Reading BNO055 data, press Ctrl-C to quit...')
+
+current_velocity = [0, 0, 0]  # Initialize with zero velocity
+current_position = [0, 0, 0]  # Initialize at the origin
+
+def calculate_displacement_from_acceleration(acceleration, time_interval):
+    # Using the equations of motion to calculate displacement
+    displacement = [0, 0, 0]
+    for i in range(3):
+        displacement[i] = current_velocity[i] * time_interval + 0.5 * acceleration[i] * (time_interval ** 2)
+    return displacement
+
 while True:
     # Read the Euler angles for heading, roll, pitch (all in degrees).
     #heading, roll, pitch = bno.read_euler()
@@ -78,8 +89,8 @@ while True:
     # Sensor temperature in degrees Celsius:
     #temp_c = bno.read_temp()
     # Magnetometer data (in micro-Teslas):
-    x,y,z = bno.read_magnetometer()
-    print('mag_x={0} mag_y={1} mag_z={2}'.format(x, y, z))
+    #x,y,z = bno.read_magnetometer()
+    #print('mag_x={0} mag_y={1} mag_z={2}'.format(x, y, z))
     # Gyroscope data (in degrees per second):
     #x,y,z = bno.read_gyroscope()
     # Accelerometer data (in meters per second squared):
@@ -89,7 +100,20 @@ while True:
     #x,y,z = bno.read_linear_acceleration()
     # Gravity acceleration data (i.e. acceleration just from gravity--returned
     # in meters per second squared):
-    x,y,z = bno.read_gravity()
-    print('grav_x={0} grav_y={1} grav_z={2}'.format(x, y, z))
+    #x,y,z = bno.read_gravity()
+    #print('grav_x={0} grav_y={1} grav_z={2}'.format(x, y, z))
     # Sleep for a second until the next reading.
+    mag_x,mag_y,mag_z = bno.read_magnetometer()
+    acc_x,acc_y,acc_z = bno.read_accelerometer()
+    displacement_from_acceleration = calculate_displacement_from_acceleration([acc_x, acc_y, acc_z], 1.00)
+
+    for i in range(3):
+        current_position[i] += displacement_from_acceleration[i]
+
+    # Print the current position
+    print("Current Position (x, y, z):", current_position)
+    telemetry = [
+        {'index': 0, 'pos_x': current_position[0], 'pos_y': current_position[1], 'pos_z': current_position[2], 'mag_x': mag_x, 'mag_y': mag_y, 'mag_z': mag_z}
+        ]
+    print(telemetry)
     time.sleep(1)

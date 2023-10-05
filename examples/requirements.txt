@@ -1,0 +1,4 @@
+Adafruit-GPIO>=0.9.3
+pyserial
+scipy
+requests
