@@ -72,6 +72,7 @@ current_position = [0, 0, 0]  # Initialize at the origin
 def calculate_displacement_from_acceleration(acceleration, time_interval):
     # Using the equations of motion to calculate displacement
     displacement = [0, 0, 0]
+    
     for i in range(3):
         current_velocity[i] = acceleration[i] * time_interval
         displacement[i] = 0.5 * acceleration[i] * pow(time_interval, 2) + current_velocity[i] * time_interval
@@ -110,7 +111,7 @@ while True:
     displacement_from_acceleration = calculate_displacement_from_acceleration([acc_x, acc_y, acc_z], 1.00)
 
     for i in range(3):
-        current_position[i] += int(displacement_from_acceleration[i])
+        current_position[i] += displacement_from_acceleration[i]
 
     # Print the current position
     print("Current Position (x, y, z):", current_position)
