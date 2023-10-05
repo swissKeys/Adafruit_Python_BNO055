@@ -107,7 +107,7 @@ while True:
     mag_x,mag_y,mag_z = bno.read_magnetometer()
     acc_x,acc_y,acc_z = bno.read_linear_acceleration()
     print('acc_x={0} acc_y={1} acc_z={2}'.format(round(acc_x), round(acc_y), round(acc_z)))
-    displacement_from_acceleration = calculate_displacement_from_acceleration([round(acc_x), round(acc_y), round(acc_z)], 1.00)
+    displacement_from_acceleration = calculate_displacement_from_acceleration([round(acc_x), round(acc_y), round(acc_z)], 0.01)
 
     for i in range(3):
         current_position[i] += displacement_from_acceleration[i]
@@ -119,4 +119,4 @@ while True:
         {'index': 0, 'pos_x': current_position[0], 'pos_y': current_position[1], 'pos_z': current_position[2], 'mag_x': mag_x, 'mag_y': mag_y, 'mag_z': mag_z}
         ] 
     #print(telemetry)
-    time.sleep(1)
+    time.sleep(0.01)
