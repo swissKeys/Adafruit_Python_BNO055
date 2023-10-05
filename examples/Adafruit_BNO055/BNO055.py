@@ -297,14 +297,14 @@ class BNO055(object):
         # Write an 8-bit value to the provided register address.  If ack is True
         # then expect an acknowledgement in serial mode, otherwise ignore any
         # acknowledgement (necessary when resetting the device).
-        print("Adress", address)
-        print("Value", value)
+        ("Adress", address)
+        ("Value", value)
         if self._i2c_device is not None:
-            print("1")
+            ("1")
             # I2C write.
             self._i2c_device.write8(address, value)
         else:
-            print("2")
+            ("2")
             # Build and send serial register write command.
             command = bytearray(5)
             command[0] = 0xAA  # Start byte
@@ -315,7 +315,7 @@ class BNO055(object):
             resp = self._serial_send(command, ack=ack)
             # Verify register write succeeded if there was an acknowledgement.
             if ack and resp[0] != 0xEE and resp[1] != 0x01:
-                print("4")
+                ("4")
                 raise RuntimeError('Register write error: 0x{0}'.format(binascii.hexlify(resp)))
 
     def _read_bytes(self, address, length):
@@ -371,33 +371,33 @@ class BNO055(object):
         BNO055 library functions.  Will return True if the BNO055 was
         successfully initialized, and False otherwise.
         """
-        print("enter init")
+        ("enter init")
         # Save the desired normal operation mode.
         self._mode = mode
         # First send a thow-away command and ignore any response or I2C errors
         # just to make sure the BNO is in a good state and ready to accept
         # commands (this seems to be necessary after a hard power down).
-        print("save op mode and bnid")
+        ("save op mode and bnid")
         try:
             self._write_byte(BNO055_PAGE_ID_ADDR, 0, ack=False)
-            print("try to write")
+            ("try to write")
         except IOError:
             # Swallow an IOError that might be raised by an I2C issue.  Only do
             # this for this very first command to help get the BNO and board's
             # I2C into a clear state ready to accept the next commands.
-            print("error not swolled")
+            ("error not swolled")
             pass
         # Make sure we're in config mode and on page 0.
         self._config_mode()
-        print("config")
+        ("config")
         self._write_byte(BNO055_PAGE_ID_ADDR, 0)
         # Check the chip ID
-        print("writting worked")
+        ("writting worked")
         bno_id = self._read_byte(BNO055_CHIP_ID_ADDR)
         logger.debug('Read chip ID: 0x{0:02X}'.format(bno_id))
 
         if bno_id != BNO055_ID:
-            print("bno_id not equivilantt to 0xA0", bno_id )
+            ("bno_id not equivilantt to 0xA0", bno_id )
             return False    
         # Reset the device.
         if self._rst is not None:
@@ -410,7 +410,7 @@ class BNO055(object):
             # Else use the reset command.  Note that ack=False is sent because
             # the chip doesn't seem to ack a reset in serial mode (by design?).
             self._write_byte(BNO055_SYS_TRIGGER_ADDR, 0x20, ack=False)
-            print("reset command")
+            ("reset command")
         # Wait 650ms after reset for chip to be ready (as suggested
         # in datasheet).
         time.sleep(0.65)
