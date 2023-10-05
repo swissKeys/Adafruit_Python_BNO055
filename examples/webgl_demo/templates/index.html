@@ -193,6 +193,18 @@
         scene.add(pointLight2);
         var backLight = new THREE.DirectionalLight(0xffff, 0.3);
         backLight.position.set(0, -0.25, -1);
+        var textureLoader = new THREE.TextureLoader();
+        var backgroundTexture = textureLoader.load('earth.jpeg');
+        var backgroundGeometry = new THREE.PlaneGeometry(2, 2); // Create a square geometry.
+        var backgroundMaterial = new THREE.MeshBasicMaterial({ map: backgroundTexture });
+
+        // Create the background mesh.
+        var backgroundMesh = new THREE.Mesh(backgroundGeometry, backgroundMaterial);
+        backgroundMesh.material.depthTest = false; // Ensure it's always rendered behind other objects.
+
+        // Add the background mesh to the scene.
+        scene.add(backgroundMesh);
+
         scene.add(backLight);
 
         
