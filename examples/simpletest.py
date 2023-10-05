@@ -72,7 +72,6 @@ current_position = [0, 0, 0]  # Initialize at the origin
 def calculate_displacement_from_acceleration(acceleration, time_interval):
     # Using the equations of motion to calculate displacement
     displacement = [0, 0, 0]
-    
     for i in range(3):
         current_velocity[i] = acceleration[i] * time_interval
         displacement[i] = 0.5 * acceleration[i] * pow(time_interval, 2) + current_velocity[i] * time_interval
@@ -108,7 +107,7 @@ while True:
     mag_x,mag_y,mag_z = bno.read_magnetometer()
     acc_x,acc_y,acc_z = bno.read_linear_acceleration()
     print('acc_x={0} acc_y={1} acc_z={2}'.format(acc_x,acc_y,acc_z))
-    displacement_from_acceleration = calculate_displacement_from_acceleration([acc_x, acc_y, acc_z], 1.00)
+    displacement_from_acceleration = calculate_displacement_from_acceleration([int(acc_x), int(acc_y), int(acc_z)], 1.00)
 
     for i in range(3):
         current_position[i] += displacement_from_acceleration[i]
