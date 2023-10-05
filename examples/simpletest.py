@@ -73,8 +73,8 @@ def calculate_displacement_from_acceleration(acceleration, time_interval):
     # Using the equations of motion to calculate displacement
     displacement = [0, 0, 0]
     for i in range(3):
-        current_velocity[i] = int(acceleration[i]) * time_interval
-        displacement[i] = current_velocity[i] * time_interval
+        current_velocity[i] = acceleration[i] * time_interval
+        displacement[i] = 0.5 * acceleration[i] * pow(time_interval, 2) + current_velocity[i] * time_interval
     return displacement
 
 while True:
