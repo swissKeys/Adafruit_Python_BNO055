@@ -110,10 +110,11 @@ while True:
     displacement_from_acceleration = calculate_displacement_from_acceleration([acc_x, acc_y, acc_z], 1.00)
 
     for i in range(3):
-        current_position[i] += displacement_from_acceleration[i]
+        current_position[i] += int(displacement_from_acceleration[i])
 
     # Print the current position
     print("Current Position (x, y, z):", current_position)
+
     telemetry = [
         {'index': 0, 'pos_x': current_position[0], 'pos_y': current_position[1], 'pos_z': current_position[2], 'mag_x': mag_x, 'mag_y': mag_y, 'mag_z': mag_z}
         ] 
