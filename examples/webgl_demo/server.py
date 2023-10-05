@@ -94,7 +94,7 @@ def read_bno():
         x, y, z, w = bno.read_quaternion()
         sys, gyro, accel, mag = bno.get_calibration_status()
         mag_x ,mag_y, mag_z = bno.read_magnetometer()
-        acc_x,acc_y,acc_z = bno.read_accelerometer()
+        acc_x,acc_y,acc_z = bno.read_linear_acceleration()
         status, self_test, error = bno.get_system_status(run_self_test=False)
         if error != 0:
             print 
@@ -139,7 +139,9 @@ def bno_sse():
         data = {'heading': heading, 'roll': roll, 'pitch': pitch, 'temp': temp,
                 'quatX': x, 'quatY': y, 'quatZ': z, 'quatW': w,
                 'calSys': sys, 'calGyro': gyro, 'calAccel': accel, 'calMag': mag,
-                'mag_x': mag_x, 'mag_y': mag_y, 'mag_z': mag_z, 'acc_x': acc_x, 'acc_y': acc_y, 'acc_z': acc_z}
+                'mag_x': mag_x, 'mag_y': mag_y, 'mag_z': mag_z, 
+                'acc_x': acc_x, 'acc_y': acc_y, 'acc_z': acc_z,
+                }
         yield 'data: {0}\n\n'.format(json.dumps(data))
 
 
