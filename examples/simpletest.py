@@ -106,6 +106,7 @@ while True:
     # Sleep for a second until the next reading.
     mag_x,mag_y,mag_z = bno.read_magnetometer()
     acc_x,acc_y,acc_z = bno.read_accelerometer()
+    print('acc_x={0} acc_y={1} acc_z={2}'.format(acc_x,acc_y,acc_z))
     displacement_from_acceleration = calculate_displacement_from_acceleration([acc_x, acc_y, acc_z], 1.00)
 
     for i in range(3):
