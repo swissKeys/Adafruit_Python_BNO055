@@ -57,7 +57,8 @@ def collect_array(axis, number_of_datapoints, length_of_one_side):
     acc_x,acc_y,acc_z = bno.read_accelerometer()
 
     # Calculate displacement from acceleration    
-    displacement_from_acceleration = calculate_displacement_from_acceleration([acc_x, acc_y, acc_z], 0.01)
+    print('acc_x={0} acc_y={1} acc_z={2}'.format(round(acc_x), round(acc_y), round(acc_z)))
+    displacement_from_acceleration = calculate_displacement_from_acceleration([round(acc_x), round(acc_y), round(acc_z)], 0.1)
 
     # Update current position
     
@@ -83,12 +84,13 @@ def collect_array(axis, number_of_datapoints, length_of_one_side):
         # Magnetometer data (in micro-Teslas):
         #random_variation = random.uniform(-1, 1)
 
-        latest_data_point = telemetry[current_index]
+        latest_data_point = telemetry[0]
         
         acc_x,acc_y,acc_z = bno.read_accelerometer()
         mag_x,mag_y,mag_z = bno.read_magnetometer()  
 
-        displacement_from_acceleration = calculate_displacement_from_acceleration([acc_x, acc_y, acc_z], 0.01)
+        print('acc_x={0} acc_y={1} acc_z={2}'.format(round(acc_x), round(acc_y), round(acc_z)))
+        displacement_from_acceleration = calculate_displacement_from_acceleration([round(acc_x), round(acc_y), round(acc_z)], 0.1)
 
         for i in range(3):
             current_position[i] += displacement_from_acceleration[i]
