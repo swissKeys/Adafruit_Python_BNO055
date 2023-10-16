@@ -71,7 +71,7 @@ def collect_array(axis, number_of_datapoints, length_of_one_side):
         ]
     print(telemetry)
 
-            # Simulate ongoing data flow
+    # Simulate ongoing data flow
     collecting_along_axis = True
     max_increment_step = length_of_one_side/number_of_datapoints
     increment_step_size = 0
@@ -81,19 +81,25 @@ def collect_array(axis, number_of_datapoints, length_of_one_side):
 
     while collecting_along_axis:
         # Magnetometer data (in micro-Teslas):
-        #x,y,z = bno.read_magnetometer()
-        random_pos_z = random.uniform(0.01, 0.03)
         #random_variation = random.uniform(-1, 1)
 
         latest_data_point = telemetry[current_index]
         
-        mag_x,mag_y,mag_z = bno.read_magnetometer()   
+        acc_x,acc_y,acc_z = bno.read_accelerometer()
+        mag_x,mag_y,mag_z = bno.read_magnetometer()  
+
+        displacement_from_acceleration = calculate_displacement_from_acceleration([acc_x, acc_y, acc_z], 0.01)
+
+        for i in range(3):
+            current_position[i] += displacement_from_acceleration[i]
+
+        print("Current Position (x, y, z):", current_position)
 
         new_data_point = {
             'index': current_index + 1,
-            'pos_x': 0.0,
-            'pos_y': 4.567,
-            'pos_z': latest_data_point["pos_"+ axis] + random_pos_z,
+            'pos_x': current_position[0],
+            'pos_y': current_position[1],
+            'pos_z': current_position[2],
             'mag_x': mag_x,
             'mag_y': mag_y,
             'mag_z': mag_z,
@@ -165,7 +171,6 @@ def calculate_current(axis, magneto_data_array, number_turns, length_of_one_side
     return av
 
 def calc_voltage_power(current, resistance): 
-    #TODO: unit check
     voltage = current*resistance
     power = voltage*current
 
