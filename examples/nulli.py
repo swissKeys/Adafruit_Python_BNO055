@@ -79,12 +79,12 @@ def collect_array(axis, number_of_datapoints, length_of_one_side):
     data_point_results = []
 
     current_index = len(telemetry) #more devine: start collecting in look but lets see
-
+    print(current_index)
     while collecting_along_axis:
         # Magnetometer data (in micro-Teslas):
         #random_variation = random.uniform(-1, 1)
 
-        latest_data_point = telemetry[0]
+        latest_data_point = telemetry[current_index]
         
         acc_x,acc_y,acc_z = bno.read_accelerometer()
         mag_x,mag_y,mag_z = bno.read_magnetometer()  
