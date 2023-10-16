@@ -127,7 +127,7 @@ def collect_array(axis, number_of_datapoints, length_of_one_side):
             return data_point_results
         time.sleep(0.01)  # Delay for 1 seconds
         # Add the new data point to the telemetry list
-        mocked_telemetry.append(new_data_point)
+        telemetry.append(new_data_point)
         
         # Increment the index
         current_index += 1
