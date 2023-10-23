@@ -62,13 +62,13 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side):
         print('mag_x={0} mag_y={1} mag_z={2}'.format(round(mag_x), round(mag_y), round(mag_z)))
         
         new_data_point = {
-            'mag_x': mag_x,
-            'mag_y': mag_y,
-            'mag_z': mag_z,
+            'mag_x': round(mag_x),
+            'mag_y': round(mag_y),
+            'mag_z': round(mag_z),
         }
 
         magneto_data_array.append(new_data_point)
-        print(f"Collecting data point {i + 1}")
+        print(f"Collecting data point {i}")
 
     print("Data collection complete.")
     return magneto_data_array
