@@ -59,11 +59,65 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side):
         input()
         mag_x,mag_y,mag_z = bno.read_magnetometer()
         print('mag_x={0} mag_y={1} mag_z={2}'.format(round(mag_x), round(mag_y), round(mag_z)))
-        magneto_data_array.append([round(mag_x), round(mag_y), round(mag_z)])
+        
+        new_data_point = {
+            'mag_x': mag_x,
+            'mag_y': mag_y,
+            'mag_z': mag_z,
+        }
+
+        magneto_data_array.append(new_data_point)
         print(f"Collecting data point {i + 1}")
 
     print("Data collection complete.")
     return magneto_data_array
+
+
+def calculate_current(axis, magneto_data_array, number_turns, length_of_one_side, distance_coils):
+
+    N = number_turns  #number of turns of wire
+    z = np.linspace(-0.05, 0.05, len(magneto_data_array)) #in meters 1U CubeSat
+    #z = np.linspace(-0.05*3, 0.05*3, len(magneto_data_array)) #in meters 3U CubeSat
+    L = length_of_one_side
+    p = 0 
+    z1 = z + distance_coils/2
+    z2 = z - distance_coils/2
+    current_to_nulli = []
+    magnetic_field = []
+    #print(z1)
+    #print(z2)
+    for index, datapoint in enumerate(magneto_data_array): #is i for one axis bevause in teh code it is 1 
+         magnetic_field.append(datapoint["mag_"+ axis])
+         current = datapoint["mag_"+ axis]*(4 * ((mu_0*N*L*L)/(np.pi)) * (1/(L*L + 4*z1[index]*z1[index])) * (1/(2*L*L + 4*z1[index]*z1[index])**0.5) *1e6  + 4 * ((mu_0*N*L*L)/(np.pi)) * (1/(L*L + 4*z2[index]*z2[index])) * (1/(2*L*L + 4*z2[index]*z2[index])**0.5) *1e6 )**-1
+         current_to_nulli.append(current)
+
+    #nullifying
+    current_to_nulli_array = np.asarray(current_to_nulli)
+    magnetic_field_array = np.asarray(magnetic_field)
+    B_null = B_z_s(z1, current_to_nulli_array, N, L) + B_z_s(z2, current_to_nulli_array, N, L)
+    #print(B_null)
+    #print(magnetic_field_array)
+    null_array = magnetic_field_array - B_null
+    for value in null_array:
+        if int(value) != 0: 
+            print("failure")
+            return
+        
+    av = np.average(current_to_nulli_array)
+    current_to_nulli_av =[]
+    for value in current_to_nulli:
+        current_to_nulli_av.append(av)
+    current_to_nulli_av= np.asarray(current_to_nulli_av)
+    B_null_av = B_z_s(z1, current_to_nulli_av, N, L) + B_z_s(z2, current_to_nulli_av, N, L)
+    null_array_av = magnetic_field_array - B_null_av
+    print(null_array_av)
+    return av
+
+def calc_voltage_power(current, resistance): 
+    voltage = current*resistance
+    power = voltage*current
+
+    return voltage, power
 
 
 def main():
@@ -73,12 +127,16 @@ def main():
     parser.add_argument('--distance_coils', type=float, required=False, default=0.54, help='Distance between coils')
     parser.add_argument('--number_turns', type=float, required=False, default=20.0, help='Number of turns in the coil')
     parser.add_argument('--measured_axis', type=str, required=False, default='z', help='Axis along which measurements are taken')
-    parser.add_argument('--number_of_datapoints', type=str, required=False, default=50, help='Number of data points to be collected')
+    parser.add_argument('--number_of_datapoints', type=str, required=False, default=5, help='Number of data points to be collected')
     args = parser.parse_args()
 
     # Enable verbose debug logging if -v is passed as a parameter.
 
     magneto_data_array = collect_array(args.measured_axis, args.number_of_datapoints, args.length_of_one_side)
-
+    current_av = calculate_current(args.measured_axis, magneto_data_array, args.number_turns, args.length_of_one_side, args.distance_coils)  
+    print(current_av, "A")
+    voltage, power = calc_voltage_power(current_av, args.resistance)
+    print(voltage)
+    
 if __name__ == "__main__":
     main()
