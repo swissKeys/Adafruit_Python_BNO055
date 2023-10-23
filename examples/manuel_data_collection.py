@@ -52,9 +52,11 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side):
     print('Gyroscope ID:       0x{0:02X}\n'.format(gyro))
 
     print('Reading BNO055 data, press Ctrl-C to quit...')
-    
+
     for i in range(number_of_datapoints):
         # Insert your data collection code here
+        mag_x,mag_y,mag_z = bno.read_magnetometer()
+        print('mag_x={0} mag_y={1} mag_z={2}'.format(round(mag_x), round(mag_y), round(mag_z)))
         print(f"Collecting data point {i + 1}")
 
     print("Data collection complete.")
