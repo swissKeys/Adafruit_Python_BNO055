@@ -7,6 +7,7 @@ import random
 import numpy as np
 
 from Adafruit_BNO055 import BNO055
+from scipy.constants import *
 #from scipy.constants import *
 from helpers import D, B_z_s, zi
 
@@ -54,7 +55,7 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side):
     print('Reading BNO055 data, press Ctrl-C to quit...')
     magneto_data_array = []
     for i in range(number_of_datapoints):
-        print("Press Enter to collect Point number {i}:")
+        print(f"Press Enter to collect Point number { i }:")
         # Insert your data collection code here
         input()
         mag_x,mag_y,mag_z = bno.read_magnetometer()
@@ -137,6 +138,6 @@ def main():
     print(current_av, "A")
     voltage, power = calc_voltage_power(current_av, args.resistance)
     print(voltage)
-    
+
 if __name__ == "__main__":
     main()
