@@ -106,12 +106,15 @@ def calculate_current(axis, magneto_data_array, number_turns, length_of_one_side
         
     av = np.average(current_to_nulli_array)
     current_to_nulli_av =[]
+
     for value in current_to_nulli:
         current_to_nulli_av.append(av)
     current_to_nulli_av= np.asarray(current_to_nulli_av)
     B_null_av = B_z_s(z1, current_to_nulli_av, N, L) + B_z_s(z2, current_to_nulli_av, N, L)
     null_array_av = magnetic_field_array - B_null_av
+
     print(null_array_av)
+
     return av
 
 def calc_voltage_power(current, resistance): 
@@ -123,9 +126,9 @@ def calc_voltage_power(current, resistance):
 
 def main():
     parser = argparse.ArgumentParser(description='Calculate voltage, power, and current')
-    parser.add_argument('--resistance', type=float, required=False, default=0.1, help='Resistance of the wire')
-    parser.add_argument('--length_of_one_side', type=float, required=False, default=1, help='Length of one side of the coil')
-    parser.add_argument('--distance_coils', type=float, required=False, default=0.54, help='Distance between coils')
+    parser.add_argument('--resistance', type=float, required=False, default=0., help='Resistance of the wire')
+    parser.add_argument('--length_of_one_side', type=float, required=False, default=0.832, help='Length of one side of the coil')
+    parser.add_argument('--distance_coils', type=float, required=False, default=0.54, help='Distance between coils in m')
     parser.add_argument('--number_turns', type=float, required=False, default=20.0, help='Number of turns in the coil')
     parser.add_argument('--measured_axis', type=str, required=False, default='z', help='Axis along which measurements are taken')
     parser.add_argument('--number_of_datapoints', type=str, required=False, default=5, help='Number of data points to be collected')
