@@ -1,6 +1,5 @@
 import logging
 import argparse
-import sys
 import datetime
 import csv
 import time
