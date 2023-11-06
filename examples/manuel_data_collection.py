@@ -93,7 +93,7 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side):
 
 
 def calculate_current(axis, magneto_data_array, number_turns, length_of_one_side, distance_coils):
-
+    print("axis measured:", axis)
     N = number_turns  #number of turns of wire
     z = np.linspace(-0.05, 0.05, len(magneto_data_array)) #in meters 1U CubeSat
     #z = np.linspace(-0.05*3, 0.05*3, len(magneto_data_array)) #in meters 3U CubeSat
@@ -122,16 +122,32 @@ def calculate_current(axis, magneto_data_array, number_turns, length_of_one_side
             print("failure")
             return
         
+    print("Array of current to nulli:", current_to_nulli_array)
     av = np.average(current_to_nulli_array)
     current_to_nulli_av =[]
 
     for value in current_to_nulli:
         current_to_nulli_av.append(av)
+
     current_to_nulli_av= np.asarray(current_to_nulli_av)
+
     B_null_av = B_z_s(z1, current_to_nulli_av, N, L) + B_z_s(z2, current_to_nulli_av, N, L)
     null_array_av = magnetic_field_array - B_null_av
 
-    print(null_array_av)
+    print("Nullified array values", null_array_av)
+    print("Average current:", av)
+
+    # Generate a unique filename based on the current date and time
+    current_datetime = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    csv_filename = f"calculate_values_for_nulli_{current_datetime}.csv"
+
+    # Write the values to a CSV file
+    with open(csv_filename, mode='w', newline='') as csv_file:
+        writer = csv.writer(csv_file)
+        writer.writerow(["Array of current to nulli", "Nullified array values", "Average current (Ampere)"])
+        writer.writerow([current_to_nulli_array, null_array_av.tolist(), av])
+
+    print(f"Values saved to {csv_filename}")
 
     return av
 
@@ -148,13 +164,14 @@ def main():
     parser.add_argument('--length_of_one_side', type=float, required=False, default=0.84, help='Length of one side of the coil in m')
     parser.add_argument('--distance_coils', type=float, required=False, default=0.456, help='Distance between coils in m')
     parser.add_argument('--number_turns', type=float, required=False, default=20.0, help='Number of turns in the coil')
-    parser.add_argument('--measured_axis', type=str, required=False, default='x', help='Axis along which measurements are taken')
+    parser.add_argument('--measured_axis', type=str, required=False, default='z', help='Axis along which measurements are taken')
     parser.add_argument('--number_of_datapoints', type=str, required=False, default=5, help='Number of data points to be collected')
     args = parser.parse_args()
 
     # Enable verbose debug logging if -v is passed as a parameter.
 
     magneto_data_array = collect_array(args.measured_axis, args.number_of_datapoints, args.length_of_one_side)
+    print("collected array rounded to integer values:", magneto_data_array)
     current_av = calculate_current(args.measured_axis, magneto_data_array, args.number_turns, args.length_of_one_side, args.distance_coils)  
     print(current_av, "A")
     voltage, power = calc_voltage_power(current_av, args.resistance)
