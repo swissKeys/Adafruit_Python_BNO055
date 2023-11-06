@@ -5,7 +5,7 @@ import csv
 import time
 import json
 import threading
-
+import sys
 import random
 import numpy as np
 
@@ -75,9 +75,9 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
     print('Magnetometer ID:    0x{0:02X}'.format(mag))
     print('Gyroscope ID:       0x{0:02X}\n'.format(gyro))
 
-    sys, gyro, accel, mag = bno.get_calibration()
+    system, gyro, accel, mag = bno.get_calibration()
 
-    print(sys)
+    print(system)
     print(gyro)
     print(accel)
     print(mag)
@@ -91,9 +91,9 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
 
     print('Loading acc and gyro')
 
-    sys, gyro, accel, mag = bno.get_calibration()
+    system, gyro, accel, mag = bno.get_calibration()
 
-    print(sys)
+    print(system)
     print(gyro)
     print(accel)
     print(mag)
