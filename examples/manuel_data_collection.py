@@ -4,6 +4,8 @@ import sys
 import datetime
 import csv
 import time
+import json
+import threading
 
 import random
 import numpy as np
@@ -42,9 +44,11 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
     # below 'bno = ...' lines is uncommented:
     # Raspberry Pi configuration with serial UART and RST connected to GPIO 18:
     bno = BNO055.BNO055(serial_port='/dev/serial0', rst=18)
-    # BeagleBone Black configuration with default I2C connection (SCL=P9_19, SDA=P9_20),
-    # and RST connected to pin P9_12:
-    #bno = BNO055.BNO055(rst='P9_12')
+
+    CALIBRATION_FILE = 'webgl_demo/calibration.json'
+
+
+    bno_changed = threading.Condition()
 
 
     # Enable verbose debug logging if -v is passed as a parameter.
@@ -73,6 +77,13 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
     print('Gyroscope ID:       0x{0:02X}\n'.format(gyro))
 
     print('Reading BNO055 data, press Ctrl-C to quit...')
+
+    with open(CALIBRATION_FILE, 'r') as cal_file:
+        data = json.load(cal_file)
+    # Grab the lock on BNO sensor access to serial access to the sensor.
+    with bno_changed:
+        bno.set_calibration(data)
+
     magneto_data_array = []
     for i in range(number_of_datapoints):
         print(f"Press Enter to collect Point number { i }:")
