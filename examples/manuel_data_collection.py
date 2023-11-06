@@ -75,7 +75,7 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
     print('Magnetometer ID:    0x{0:02X}'.format(mag))
     print('Gyroscope ID:       0x{0:02X}\n'.format(gyro))
 
-    system, gyro, accel, mag = bno.get_calibration()
+    system, gyro, accel, mag = bno.get_calibration_status()
 
     print(system)
     print(gyro)
@@ -91,7 +91,7 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
 
     print('Loading acc and gyro')
 
-    system, gyro, accel, mag = bno.get_calibration()
+    system, gyro, accel, mag = bno.get_calibration_status()
 
     print(system)
     print(gyro)
