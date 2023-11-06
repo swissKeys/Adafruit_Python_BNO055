@@ -3,6 +3,7 @@ import argparse
 import sys
 import datetime
 import csv
+import time
 
 import random
 import numpy as np
@@ -13,6 +14,25 @@ from scipy.constants import *
 from helpers import D, B_z_s, zi
 
 def collect_array(measured_axis, number_of_datapoints, length_of_one_side, checking_data):
+
+    def average_num_in_time(frequency):
+
+        total_x, total_y, total_z = 0, 0, 0
+
+        for _ in range(frequency):
+            mag_x, mag_y, mag_z = bno.read_magnetometer()
+            total_x += mag_x
+            total_y += mag_y
+            total_z += mag_z
+            print(mag_z)
+            time.sleep(1.0 / frequency)
+
+        avg_x = total_x / frequency
+        avg_y = total_y / frequency
+        avg_z = total_z / frequency
+
+        
+        return {'mag_x': X, 'mag_y': Y, 'mag_z': Z}
     # Implement your data collection logic here
     print("Press Enter to start data collection:")
     # Wait for the user to press Enter to start the loop
@@ -59,7 +79,9 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
         print(f"Press Enter to collect Point number { i }:")
         # Insert your data collection code here
         input()
-        mag_x,mag_y,mag_z = bno.read_magnetometer()
+
+        mag_x,mag_y,mag_z = average_num_in_time(10)
+        #mag_x,mag_y,mag_z = bno.read_magnetometer()
 
         print('mag_x={0} mag_y={1} mag_z={2}'.format(round(mag_x), round(mag_y), round(mag_z)))
         print('mag_x={0} mag_y={1} mag_z={2}'.format(mag_x, mag_y, mag_z))

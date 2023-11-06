@@ -46,3 +46,6 @@ def seph_to_cat(total_intesity, declination, inclination):
   Z = total_intesity * math.cos(inclination_rad)
 
   return {'mag_x': X, 'mag_y': Y, 'mag_z': Z}
+
+
+
