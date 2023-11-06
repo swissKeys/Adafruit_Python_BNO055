@@ -12,7 +12,7 @@ from scipy.constants import *
 #from scipy.constants import *
 from helpers import D, B_z_s, zi
 
-def collect_array(measured_axis, number_of_datapoints, length_of_one_side):
+def collect_array(measured_axis, number_of_datapoints, length_of_one_side, checking_data):
     # Implement your data collection logic here
     print("Press Enter to start data collection:")
     # Wait for the user to press Enter to start the loop
@@ -75,7 +75,9 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side):
 
     # Generate a unique filename based on the current date and time
     current_datetime = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    csv_filename = f"current_field_{current_datetime}.csv"
+    if checking_data == False:
+        csv_filename = f"earth_field_{current_datetime}.csv"
+    else: csv_filename = f"nullified_field_{current_datetime}.csv"
 
     # Write the data to a CSV file
     with open(csv_filename, mode='w', newline='') as csv_file:
@@ -144,8 +146,8 @@ def calculate_current(axis, magneto_data_array, number_turns, length_of_one_side
     # Write the values to a CSV file
     with open(csv_filename, mode='w', newline='') as csv_file:
         writer = csv.writer(csv_file)
-        writer.writerow(["Array of current to nulli", "Nullified array values", "Average current (Ampere)"])
-        writer.writerow([current_to_nulli_array, null_array_av.tolist(), av])
+        writer.writerow(["axis","Array of current to nulli", "Nullified array values", "Average current (Ampere)", "number_turns", "length_of_one_side", "distance_coils"])
+        writer.writerow([axis, current_to_nulli_array, null_array_av.tolist(), av, number_turns, length_of_one_side, distance_coils])
 
     print(f"Values saved to {csv_filename}")
 
@@ -170,12 +172,14 @@ def main():
 
     # Enable verbose debug logging if -v is passed as a parameter.
 
-    magneto_data_array = collect_array(args.measured_axis, args.number_of_datapoints, args.length_of_one_side)
+    magneto_data_array = collect_array(args.measured_axis, args.number_of_datapoints, args.length_of_one_side, False)
     print("collected array rounded to integer values:", magneto_data_array)
     current_av = calculate_current(args.measured_axis, magneto_data_array, args.number_turns, args.length_of_one_side, args.distance_coils)  
     print(current_av, "A")
     voltage, power = calc_voltage_power(current_av, args.resistance)
     print(voltage)
+    #measured_data_array = collect_array(args.measured_axis, args.number_of_datapoints, args.length_of_one_side, True)
+    #print(measured_data_array)
 
 if __name__ == "__main__":
     main()
