@@ -24,7 +24,6 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
             total_x += mag_x
             total_y += mag_y
             total_z += mag_z
-            print(mag_z)
             time.sleep(1.0 / frequency)
 
         avg_x = total_x / frequency
@@ -80,7 +79,7 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
         # Insert your data collection code here
         input()
 
-        mag_x,mag_y,mag_z = average_num_in_time(10)
+        mag_x,mag_y,mag_z = average_num_in_time(100)
         #mag_x,mag_y,mag_z = bno.read_magnetometer()
 
         print('mag_x={0} mag_y={1} mag_z={2}'.format(round(mag_x), round(mag_y), round(mag_z)))
