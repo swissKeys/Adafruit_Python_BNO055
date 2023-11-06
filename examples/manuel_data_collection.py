@@ -1,7 +1,8 @@
 import logging
 import argparse
 import sys
-import time
+import datetime
+import csv
 
 import random
 import numpy as np
@@ -59,16 +60,33 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side):
         # Insert your data collection code here
         input()
         mag_x,mag_y,mag_z = bno.read_magnetometer()
+
         print('mag_x={0} mag_y={1} mag_z={2}'.format(round(mag_x), round(mag_y), round(mag_z)))
+        print('mag_x={0} mag_y={1} mag_z={2}'.format(mag_x, mag_y, mag_z))
         
         new_data_point = {
             'mag_x': round(mag_x),
             'mag_y': round(mag_y),
             'mag_z': round(mag_z),
         }
-
         magneto_data_array.append(new_data_point)
+
         print(f"Collecting data point {i}")
+
+    # Generate a unique filename based on the current date and time
+    current_datetime = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    csv_filename = f"current_field_{current_datetime}.csv"
+
+    # Write the data to a CSV file
+    with open(csv_filename, mode='w', newline='') as csv_file:
+        fieldnames = ['mag_x', 'mag_y', 'mag_z']
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+
+        writer.writeheader()
+        for data_point in magneto_data_array:
+            writer.writerow(data_point)
+
+    print(f"Data collection complete. Data saved to {csv_filename}")
 
     print("Data collection complete.")
     return magneto_data_array
