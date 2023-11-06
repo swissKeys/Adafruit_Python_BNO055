@@ -89,7 +89,7 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
     with bno_changed:
         bno.set_calibration(data)
 
-    print('Loading acc and gyro')
+    print('Loading calib')
 
     system, gyro, accel, mag = bno.get_calibration_status()
 
@@ -224,8 +224,11 @@ def main():
     print(current_av, "A")
     voltage, power = calc_voltage_power(current_av, args.resistance)
     print(voltage)
-    #measured_data_array = collect_array(args.measured_axis, args.number_of_datapoints, args.length_of_one_side, True)
-    #print(measured_data_array)
+    print("Press enter to check nullification:")
+    input()
+    measured_data_array = collect_array(args.measured_axis, args.number_of_datapoints, args.length_of_one_side, True)
+    print("Measured Array after nulli:", measured_data_array)
+    print("Rounded Avarage:", round(np.average(measured_data_array)))
 
 if __name__ == "__main__":
     main()
