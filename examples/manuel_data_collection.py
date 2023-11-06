@@ -28,11 +28,11 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
             time.sleep(1.0 / frequency)
 
         avg_x = total_x / frequency
-        avg_y = total_y / frequency
+        avg_x = total_y / frequency
         avg_z = total_z / frequency
 
         
-        return {'mag_x': X, 'mag_y': Y, 'mag_z': Z}
+        return avg_x, avg_x, avg_z
     # Implement your data collection logic here
     print("Press Enter to start data collection:")
     # Wait for the user to press Enter to start the loop
