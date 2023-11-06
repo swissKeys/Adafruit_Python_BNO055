@@ -76,13 +76,28 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
     print('Magnetometer ID:    0x{0:02X}'.format(mag))
     print('Gyroscope ID:       0x{0:02X}\n'.format(gyro))
 
-    print('Reading BNO055 data, press Ctrl-C to quit...')
+    sys, gyro, accel, mag = bno.get_calibration()
+
+    print(sys)
+    print(gyro)
+    print(accel)
+    print(mag)
+
 
     with open(CALIBRATION_FILE, 'r') as cal_file:
         data = json.load(cal_file)
     # Grab the lock on BNO sensor access to serial access to the sensor.
     with bno_changed:
         bno.set_calibration(data)
+
+    print('Loading acc and gyro')
+
+    sys, gyro, accel, mag = bno.get_calibration()
+
+    print(sys)
+    print(gyro)
+    print(accel)
+    print(mag)
 
     magneto_data_array = []
     for i in range(number_of_datapoints):
