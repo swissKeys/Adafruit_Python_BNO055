@@ -213,7 +213,7 @@ def main():
     parser.add_argument('--distance_coils', type=float, required=False, default=0.456, help='Distance between coils in m')
     parser.add_argument('--number_turns', type=float, required=False, default=20.0, help='Number of turns in the coil')
     parser.add_argument('--measured_axis', type=str, required=False, default='z', help='Axis along which measurements are taken')
-    parser.add_argument('--number_of_datapoints', type=str, required=False, default=5, help='Number of data points to be collected')
+    parser.add_argument('--number_of_datapoints', type=str, required=False, default=30, help='Number of data points to be collected')
     args = parser.parse_args()
 
     # Enable verbose debug logging if -v is passed as a parameter.
@@ -228,7 +228,6 @@ def main():
     input()
     measured_data_array = collect_array(args.measured_axis, args.number_of_datapoints, args.length_of_one_side, True)
     print("Measured Array after nulli:", measured_data_array)
-    print("Rounded Avarage:", round(np.average(measured_data_array)))
 
 if __name__ == "__main__":
     main()
