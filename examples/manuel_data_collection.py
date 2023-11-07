@@ -150,9 +150,16 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
     else:
         extensive_data_cvs = f"extensive_nullified_field_{current_datetime}.csv" 
         averaged_values_cvs = f"nullified_field_{current_datetime}.csv"
-    magneto_data_array = np.array(magneto_data_array)
-    detailed_data = np.array(detailed_data)
-    np.savetxt(extensive_data_cvs, detailed_data, delimiter=',')
+    
+    # Save magneto_data_array to a CSV file
+    with open(averaged_values_cvs, 'w', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=['mag_x', 'mag_y', 'mag_z'])
+        writer.writeheader()
+        writer.writerows(magneto_data_array)
+
+    print(magneto_data_array)
+    print(detailed_data)
+
     print("Data collection complete.")
     return magneto_data_array
 
