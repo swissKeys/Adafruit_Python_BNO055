@@ -129,7 +129,7 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
             'mag_z': round(mag_z, 4),
         }
         magneto_data_array.append(new_data_point)
-        detailed_data.append(i+1, array_x, array_y, array_z)
+        detailed_data.append((i + 1, array_x, array_y, array_z))
         centimeter =+ 1
         print(f"Collecting data point {i+1}")
     
