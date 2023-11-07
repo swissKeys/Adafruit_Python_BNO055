@@ -111,7 +111,7 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
 
     magneto_data_array = []
     detailed_data = []
-    centimeter = 0
+    centimeter = 65
     for i in range(number_of_datapoints):
         print(f"Press Enter to collect Point number { i+1 } on {centimeter} cm:")
         # Insert your data collection code here
@@ -137,7 +137,7 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
         magneto_data_array.append(new_data_point)
         detailed_data.append(new_exyensive_data_point)
 
-        centimeter += 1
+        centimeter -= 1
         print(f"Collecting data point {i+1}")
     
     # Generate a unique filename based on the current date and time
@@ -236,7 +236,7 @@ def main():
     parser.add_argument('--distance_coils', type=float, required=False, default=0.456, help='Distance between coils in m')
     parser.add_argument('--number_turns', type=float, required=False, default=20.0, help='Number of turns in the coil')
     parser.add_argument('--measured_axis', type=str, required=False, default='z', help='Axis along which measurements are taken')
-    parser.add_argument('--number_of_datapoints', type=str, required=False, default=5, help='Number of data points to be collected')
+    parser.add_argument('--number_of_datapoints', type=str, required=False, default=31, help='Number of data points to be collected')
     args = parser.parse_args()
 
     # Enable verbose debug logging if -v is passed as a parameter.
