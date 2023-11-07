@@ -16,15 +16,25 @@ from helpers import D, B_z_s, zi
 
 def collect_array(measured_axis, number_of_datapoints, length_of_one_side, checking_data):
 
+    # Open the CSV file in write mode (use 'a' for append mode if the file already exists)
+
     def average_num_in_time(frequency):
 
         total_x, total_y, total_z = 0, 0, 0
 
+        array_x = []
+        array_y = []
+        array_z = []
+
         for _ in range(frequency):
+            
             mag_x, mag_y, mag_z = bno.read_magnetometer()
             total_x += mag_x
+            array_x.append(mag_x)
             total_y += mag_y
+            array_y.append(mag_y)
             total_z += mag_z
+            array_z.append(mag_z)
             time.sleep(1.0 / frequency)
 
         avg_x = total_x / frequency
@@ -32,7 +42,8 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
         avg_z = total_z / frequency
 
         
-        return avg_x, avg_x, avg_z
+        return avg_x, avg_x, avg_z, array_x, array_y, array_z
+    
     # Implement your data collection logic here
     print("Press Enter to start data collection:")
     # Wait for the user to press Enter to start the loop
@@ -99,34 +110,42 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
     print(mag)
 
     magneto_data_array = []
+    detailed_data = []
+    centimeter = 0
     for i in range(number_of_datapoints):
-        print(f"Press Enter to collect Point number { i }:")
+        print(f"Press Enter to collect Point number { i+1 } on {centimeter} cm:")
         # Insert your data collection code here
         input()
 
-        mag_x,mag_y,mag_z = average_num_in_time(100)
+        mag_x,mag_y,mag_z, array_x, array_y, array_z = average_num_in_time(100)
         #mag_x,mag_y,mag_z = bno.read_magnetometer()
 
-        print('mag_x={0} mag_y={1} mag_z={2}'.format(round(mag_x), round(mag_y), round(mag_z)))
+        print('mag_x={0} mag_y={1} mag_z={2}'.format(round(mag_x, 4), round(mag_y, 4), round(mag_z, 4)))
         print('mag_x={0} mag_y={1} mag_z={2}'.format(mag_x, mag_y, mag_z))
         
         new_data_point = {
-            'mag_x': round(mag_x),
-            'mag_y': round(mag_y),
-            'mag_z': round(mag_z),
+            'mag_x': round(mag_x, 4),
+            'mag_y': round(mag_y, 4),
+            'mag_z': round(mag_z, 4),
         }
         magneto_data_array.append(new_data_point)
-
-        print(f"Collecting data point {i}")
-
+        detailed_data.append(i+1, array_x, array_y, array_z)
+        centimeter =+ 1
+        print(f"Collecting data point {i+1}")
+    
     # Generate a unique filename based on the current date and time
     current_datetime = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+
     if checking_data == False:
-        csv_filename = f"earth_field_{current_datetime}.csv"
-    else: csv_filename = f"nullified_field_{current_datetime}.csv"
+        extensive_data_cvs = f"extensive_earth_field_{current_datetime}.csv"
+        averaged_values_cvs = f"earth_field_{current_datetime}.csv"
+    else:
+        extensive_data_cvs = f"extensive_nullified_field_{current_datetime}.csv" 
+        averaged_values_cvs = f"nullified_field_{current_datetime}.csv"
 
     # Write the data to a CSV file
-    with open(csv_filename, mode='w', newline='') as csv_file:
+    with open(averaged_values_cvs, mode='w', newline='') as csv_file:
         fieldnames = ['mag_x', 'mag_y', 'mag_z']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
@@ -134,7 +153,21 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
         for data_point in magneto_data_array:
             writer.writerow(data_point)
 
-    print(f"Data collection complete. Data saved to {csv_filename}")
+    print(f"Data collection complete. Data saved to {averaged_values_cvs}")
+
+    # Write the data to the CSV file
+    with open(extensive_data_cvs, "w", newline="") as csvfile:
+        writer = csv.writer(csvfile)
+        
+        # Write the header row
+        writer.writerow(["Call", "Array_X", "Array_Y", "Array_Z"])
+        
+        # Write the data rows
+        for row in detailed_data:
+            call, array_x, array_y, array_z = row
+            writer.writerow([call] + array_x + array_y + array_z)
+    
+    print(f"Data collection complete. Extensive data saved to {extensive_data_cvs}")
 
     print("Data collection complete.")
     return magneto_data_array
@@ -187,15 +220,15 @@ def calculate_current(axis, magneto_data_array, number_turns, length_of_one_side
 
     # Generate a unique filename based on the current date and time
     current_datetime = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    csv_filename = f"calculate_values_for_nulli_{current_datetime}.csv"
+    averaged_values_cvs = f"calculate_values_for_nulli_{current_datetime}.csv"
 
     # Write the values to a CSV file
-    with open(csv_filename, mode='w', newline='') as csv_file:
+    with open(averaged_values_cvs, mode='w', newline='') as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(["axis","Array of current to nulli", "Nullified array values", "Average current (Ampere)", "number_turns", "length_of_one_side", "distance_coils"])
         writer.writerow([axis, current_to_nulli_array, null_array_av.tolist(), av, number_turns, length_of_one_side, distance_coils])
 
-    print(f"Values saved to {csv_filename}")
+    print(f"Values saved to {averaged_values_cvs}")
 
     return av
 
@@ -213,7 +246,7 @@ def main():
     parser.add_argument('--distance_coils', type=float, required=False, default=0.456, help='Distance between coils in m')
     parser.add_argument('--number_turns', type=float, required=False, default=20.0, help='Number of turns in the coil')
     parser.add_argument('--measured_axis', type=str, required=False, default='z', help='Axis along which measurements are taken')
-    parser.add_argument('--number_of_datapoints', type=str, required=False, default=29, help='Number of data points to be collected')
+    parser.add_argument('--number_of_datapoints', type=str, required=False, default=31, help='Number of data points to be collected')
     args = parser.parse_args()
 
     # Enable verbose debug logging if -v is passed as a parameter.
