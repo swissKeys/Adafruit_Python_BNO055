@@ -121,7 +121,6 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
         #mag_x,mag_y,mag_z = bno.read_magnetometer()
 
         print('mag_x={0} mag_y={1} mag_z={2}'.format(round(mag_x, 4), round(mag_y, 4), round(mag_z, 4)))
-        print('mag_x={0} mag_y={1} mag_z={2}'.format(mag_x, mag_y, mag_z))
         
         new_data_point = {
             'mag_x': round(mag_x, 4),
