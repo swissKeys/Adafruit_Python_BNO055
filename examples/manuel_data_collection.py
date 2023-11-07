@@ -143,19 +143,20 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
     # Generate a unique filename based on the current date and time
     current_datetime = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
+    if checking_data == False:
+        json_file = "data_earth.json"
+    else:
+        json_file = "data_nulli.json"
+        
+
     data_dict = {
     "magneto_data": magneto_data_array,
     "detailed_data": detailed_data
     }
 
-    # Define the file name for the JSON file
-    json_file = "data.json"
-
     # Save the data dictionary as a JSON object
     with open(json_file, 'w') as f:
         json.dump(data_dict, f, indent=4) 
-        
-
 
     print(magneto_data_array)
 
