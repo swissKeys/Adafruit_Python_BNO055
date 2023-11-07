@@ -128,8 +128,9 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
             'mag_y': round(mag_y, 4),
             'mag_z': round(mag_z, 4),
         }
+
         magneto_data_array.append(new_data_point)
-        detailed_data.append((i + 1, array_x, array_y, array_z))
+        detailed_data.append(mag_x, mag_y, mag_z, array_x, array_y, array_z)
         centimeter += 1
         print(f"Collecting data point {i+1}")
     
@@ -143,31 +144,9 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
     else:
         extensive_data_cvs = f"extensive_nullified_field_{current_datetime}.csv" 
         averaged_values_cvs = f"nullified_field_{current_datetime}.csv"
-
-    # Write the data to a CSV file
-    with open(averaged_values_cvs, mode='w', newline='') as csv_file:
-        fieldnames = ['mag_x', 'mag_y', 'mag_z']
-        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-
-        writer.writeheader()
-        for data_point in magneto_data_array:
-            writer.writerow(data_point)
-
-    print(f"Data collection complete. Data saved to {averaged_values_cvs}")
-
-    with open(extensive_data_cvs, "w", newline="") as csvfile:
-        writer = csv.writer(csvfile)
-        
-        # Write the header row
-        writer.writerow(["Call", "Array_X", "Array_Y", "Array_Z"])
-        
-        # Write the data rows
-        for row in detailed_data:
-            call, array_x, array_y, array_z = row
-            writer.writerow([call, array_x, array_y, array_z])
-        
-    print(f"Data collection complete. Extensive data saved to {extensive_data_cvs}")
-
+    magneto_data_array = np.array(magneto_data_array)
+    detailed_data = np.array(detailed_data)
+    np.savetxt(extensive_data_cvs, detailed_data, delimiter=',')
     print("Data collection complete.")
     return magneto_data_array
 
