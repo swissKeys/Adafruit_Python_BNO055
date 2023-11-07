@@ -156,9 +156,23 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
         writer = csv.DictWriter(f, fieldnames=['mag_x', 'mag_y', 'mag_z'])
         writer.writeheader()
         writer.writerows(magneto_data_array)
+     # Create a list of headers with subcolumns
+    headers = ['mag_x', 'mag_y', 'mag_z']
+    header_with_subcolumns = [f"{header}_{i+1}" for header in headers for i in range(100)]
+
+    # Save detailed_data to a CSV file with 100 subcolumns for each header
+    with open(extensive_data_cvs, 'w', newline='') as f:
+        writer = csv.writer(f)
+        
+        # Write the header row with subcolumn names
+        writer.writerow(header_with_subcolumns)
+        
+        # Write the data rows with subcolumn values
+        for item in detailed_data:
+            data_row = [item['mag_x'][i] for i in range(100)] + [item['mag_y'][i] for i in range(100)] + [item['mag_z'][i] for i in range(100)]
+            writer.writerow(data_row)   
 
     print(magneto_data_array)
-    print(detailed_data)
 
     print("Data collection complete.")
     return magneto_data_array
