@@ -38,11 +38,11 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
             time.sleep(1.0 / frequency)
 
         avg_x = total_x / frequency
-        avg_x = total_y / frequency
+        avg_y = total_y / frequency
         avg_z = total_z / frequency
 
         
-        return avg_x, avg_x, avg_z, array_x, array_y, array_z
+        return avg_x, avg_y, avg_z, array_x, array_y, array_z
     
     # Implement your data collection logic here
     print("Press Enter to start data collection:")
@@ -130,7 +130,7 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
         }
         magneto_data_array.append(new_data_point)
         detailed_data.append((i + 1, array_x, array_y, array_z))
-        centimeter =+ 1
+        centimeter += 1
         print(f"Collecting data point {i+1}")
     
     # Generate a unique filename based on the current date and time
@@ -155,7 +155,6 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
 
     print(f"Data collection complete. Data saved to {averaged_values_cvs}")
 
-    # Write the data to the CSV file
     with open(extensive_data_cvs, "w", newline="") as csvfile:
         writer = csv.writer(csvfile)
         
@@ -165,8 +164,8 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
         # Write the data rows
         for row in detailed_data:
             call, array_x, array_y, array_z = row
-            writer.writerow([call] + array_x + array_y + array_z)
-    
+            writer.writerow([call, array_x, array_y, array_z])
+        
     print(f"Data collection complete. Extensive data saved to {extensive_data_cvs}")
 
     print("Data collection complete.")
