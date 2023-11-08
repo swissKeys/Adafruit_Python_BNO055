@@ -1,4 +1,4 @@
-# Adafruit Python BNO055
+# Using Adafruit Python BNO055 and Raspberry Pi 4 for a Helmholtzcage simulation
 
 This is a Python library for accessing the Bosch BNO055 absolute orientation sensor on a Raspberry Pi or Beaglebone Black.
 
