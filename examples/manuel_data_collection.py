@@ -93,25 +93,32 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
     print(accel)
     print(mag)
 
+    """ 
+        with open(CALIBRATION_FILE, 'r') as cal_file:
+            data = json.load(cal_file)
+        # Grab the lock on BNO sensor access to serial access to the sensor.
+        with bno_changed:
+            bno.set_calibration(data)
 
-    with open(CALIBRATION_FILE, 'r') as cal_file:
-        data = json.load(cal_file)
-    # Grab the lock on BNO sensor access to serial access to the sensor.
-    with bno_changed:
-        bno.set_calibration(data)
+        print('Loading calib') """
 
-    print('Loading calib')
 
     system, gyro, accel, mag = bno.get_calibration_status()
 
-    print(system)
-    print(gyro)
-    print(accel)
-    print(mag)
+    while mag & system != 3:
+
+        bno.get_calibration_status()
+
+        print(system)
+        print(gyro)
+        print(accel)
+        print(mag)
+        time.sleep(1.0/10)
 
     magneto_data_array = []
     detailed_data = []
     centimeter = 65
+
     for i in range(number_of_datapoints):
         print(f"Press Enter to collect Point number { i+1 } on {centimeter} cm:")
         # Insert your data collection code here
