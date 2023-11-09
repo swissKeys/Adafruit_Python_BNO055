@@ -105,15 +105,11 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
 
     system, gyro, accel, mag = bno.get_calibration_status()
 
-    while mag & system != 3:
+    while mag != 3:
 
         bno.get_calibration_status()
-
-        print(system)
-        print(gyro)
-        print(accel)
         print(mag)
-        time.sleep(1.0/10)
+        time.sleep(1.0/1)
 
     magneto_data_array = []
     detailed_data = []
