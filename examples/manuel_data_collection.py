@@ -35,7 +35,7 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
             array_y.append(mag_y)
             total_z += mag_z
             array_z.append(mag_z)
-            time.sleep(10.0 / frequency)
+            time.sleep(1.0 / frequency)
 
         avg_x = total_x / frequency
         avg_y = total_y / frequency
@@ -117,7 +117,7 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
         # Insert your data collection code here
         input()
 
-        mag_x,mag_y,mag_z, array_x, array_y, array_z = average_num_in_time(100)
+        mag_x,mag_y,mag_z, array_x, array_y, array_z = average_num_in_time(50)
         #mag_x,mag_y,mag_z = bno.read_magnetometer()
 
         print('mag_x={0} mag_y={1} mag_z={2}'.format(round(mag_x, 4), round(mag_y, 4), round(mag_z, 4)))
@@ -237,7 +237,7 @@ def main():
     parser.add_argument('--distance_coils', type=float, required=False, default=0.456, help='Distance between coils in m')
     parser.add_argument('--number_turns', type=float, required=False, default=20.0, help='Number of turns in the coil')
     parser.add_argument('--measured_axis', type=str, required=False, default='z', help='Axis along which measurements are taken')
-    parser.add_argument('--number_of_datapoints', type=str, required=False, default=31, help='Number of data points to be collected')
+    parser.add_argument('--number_of_datapoints', type=str, required=False, default=5, help='Number of data points to be collected')
     args = parser.parse_args()
 
     # Enable verbose debug logging if -v is passed as a parameter.
