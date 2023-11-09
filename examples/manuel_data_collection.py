@@ -144,9 +144,9 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
     current_datetime = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
     if checking_data == False:
-        json_file = "data_earth_{current_datetime}.json"
+        json_file = "collection_start_65_end_{centimeter}_mitte_{measured_axis}_{current_datetime}.json"
     else:
-        json_file = "data_nulli_{current_datetime}.json"
+        json_file = "checking_start_65_end_{centimeter}_mitte_{measured_axis}_{current_datetime}.json"
         
 
     data_dict = {
