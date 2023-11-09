@@ -35,7 +35,7 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
             array_y.append(mag_y)
             total_z += mag_z
             array_z.append(mag_z)
-            time.sleep(1.0 / frequency)
+            time.sleep(4.0 / frequency)
 
         avg_x = total_x / frequency
         avg_y = total_y / frequency
