@@ -144,9 +144,9 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
     current_datetime = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
     if checking_data == False:
-        json_file = "collection_start_65_end_{centimeter}_mitte_{measured_axis}_{current_datetime}.json"
+        json_file = f"collection_start_65_end_{centimeter}_mitte_{measured_axis}_{current_datetime}.json"
     else:
-        json_file = "checking_start_65_end_{centimeter}_mitte_{measured_axis}_{current_datetime}.json"
+        json_file = f"checking_start_65_end_{centimeter}_mitte_{measured_axis}_{current_datetime}.json"
         
 
     data_dict = {
@@ -247,7 +247,7 @@ def main():
     current_av = calculate_current(args.measured_axis, magneto_data_array, args.number_turns, args.length_of_one_side, args.distance_coils)  
     print(current_av, "A")
     voltage, power = calc_voltage_power(current_av, args.resistance)
-    print(voltage)
+    print(voltage, 'volts')
     print("Press enter to check nullification:")
     input()
     measured_data_array = collect_array(args.measured_axis, args.number_of_datapoints, args.length_of_one_side, True)
