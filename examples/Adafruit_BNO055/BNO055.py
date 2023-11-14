@@ -218,6 +218,7 @@ class BNO055(object):
         # bus (or the default system GPIO bus if none is provided).
         self._rst = rst
         if self._rst is not None:
+            print(self._rst)
             if gpio is None:
                 import Adafruit_GPIO as GPIO
                 gpio = GPIO.get_platform_gpio()

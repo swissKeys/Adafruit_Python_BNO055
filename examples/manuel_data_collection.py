@@ -18,6 +18,8 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
 
     # Open the CSV file in write mode (use 'a' for append mode if the file already exists)
 
+    CALIBRATION_FILE = 'webgl_demo/calibration.json'
+
     def average_num_in_time(frequency):
 
         total_x, total_y, total_z = 0, 0, 0
@@ -55,11 +57,6 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
     # Raspberry Pi configuration with serial UART and RST connected to GPIO 18:
     bno = BNO055.BNO055(serial_port='/dev/serial0', rst=18)
 
-    CALIBRATION_FILE = 'webgl_demo/calibration.json'
-
-
-    bno_changed = threading.Condition()
-
 
     # Enable verbose debug logging if -v is passed as a parameter.
     if len(sys.argv) == 2 and sys.argv[1].lower() == '-v':
@@ -93,6 +90,7 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
     print(accel)
     print(mag)
 
+    bno_changed = threading.Condition()
     
     with open(CALIBRATION_FILE, 'r') as cal_file:
         data = json.load(cal_file)
