@@ -92,11 +92,11 @@ def collect_array(measured_axis, number_of_datapoints, length_of_one_side, check
 
     bno_changed = threading.Condition()
     
-    with open(CALIBRATION_FILE, 'r') as cal_file:
-        data = json.load(cal_file)
-    # Grab the lock on BNO sensor access to serial access to the sensor.
-    with bno_changed:
-        bno.set_calibration(data)
+    """     with open(CALIBRATION_FILE, 'r') as cal_file:
+            data = json.load(cal_file)
+        # Grab the lock on BNO sensor access to serial access to the sensor.
+        with bno_changed:
+            bno.set_calibration(data) """
 
     print('Loading calib')
 
